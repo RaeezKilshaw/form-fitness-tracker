@@ -86,20 +86,17 @@
        LAYOUT
     ===================================================== */
     #app {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      padding-top: 56px;    /* fixed header height (mobile) */
-      padding-bottom: 64px; /* mobile bottom nav */
-    }
-    @media (min-width: 768px) {
-      #app { padding-bottom: 0; padding-top: 100px; } /* 56px header + 44px tab nav */
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100dvh;
+      padding-top: 52px;
+      padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
     }
 
     .page-content {
-      max-width: 1100px;
+      max-width: 480px;
       margin: 0 auto;
-      padding: 24px 16px 40px;
+      padding: 20px 20px 0;
       width: 100%;
     }
 
@@ -107,15 +104,21 @@
        HEADER
     ===================================================== */
     #header {
-      background: #111;
-      border-bottom: 1px solid var(--border);
-      padding: 0 16px;
-      height: 56px;
+      background: rgba(10,10,10,0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0 20px;
+      height: 52px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
       z-index: 100;
     }
     #header .logo {
@@ -148,30 +151,23 @@
     .header-btn:hover { border-color: var(--accent); color: var(--accent); }
     .header-btn.accent { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
     .header-btn.accent:hover { background: var(--accent2); }
-    #last-export { font-size: 10px; color: var(--muted); display: none; }
-    @media (min-width: 768px) { #last-export { display: block; } }
+    #last-export { display: none; }
 
     /* =====================================================
        TAB NAVIGATION
     ===================================================== */
     #tab-nav {
       position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: #111;
-      border-top: 1px solid var(--border);
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      background: var(--surface);
+      border-top: 0.5px solid var(--border);
       display: flex;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
       z-index: 100;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    #tab-nav::-webkit-scrollbar { display: none; }
-    @media (min-width: 768px) {
-      #tab-nav {
-        top: 56px; bottom: auto;
-        border-top: none;
-        border-bottom: 1px solid var(--border);
-        overflow-x: auto;
-      }
     }
     .tab-btn {
       display: flex;
@@ -179,45 +175,207 @@
       align-items: center;
       justify-content: center;
       flex: 1;
-      min-width: 56px;
-      padding: 6px 4px 4px;
+      padding: 8px 0 6px;
+      min-height: 56px;
       background: transparent;
       border: none;
-      color: var(--muted);
+      color: var(--faint);
       cursor: pointer;
       transition: color 0.15s;
-      font-family: var(--font-sans);
-      gap: 2px;
+      gap: 3px;
+      position: relative;
     }
     .tab-btn:hover { color: var(--text); }
     .tab-btn.active { color: var(--accent); }
-    .tab-btn .tab-icon { font-size: 18px; line-height: 1; }
-    .tab-btn .tab-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; }
-    @media (min-width: 768px) {
-      .tab-btn { flex-direction: row; gap: 6px; padding: 0 14px; height: 44px; flex: none; }
-      .tab-btn .tab-icon { font-size: 16px; }
-      .tab-btn .tab-label { font-size: 11px; }
+    .tab-btn.active::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 20%; right: 20%;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 0 0 2px 2px;
     }
-    .tab-active-bar {
-      display: none;
-    }
-    @media (min-width: 768px) {
-      .tab-btn.active { position: relative; }
-      .tab-btn.active::after {
-        content: '';
-        position: absolute;
-        bottom: 0; left: 0; right: 0;
-        height: 2px;
-        background: var(--accent);
-        border-radius: 2px 2px 0 0;
-      }
-    }
+    .tab-btn .tab-icon { font-size: 20px; line-height: 1; }
+    .tab-btn .tab-label { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase; }
 
     /* =====================================================
        TAB PAGES
     ===================================================== */
     .tab-page { display: none; }
     .tab-page.active { display: block; }
+
+    /* =====================================================
+       SUB-TABS (pill switcher inside Log + Stats)
+    ===================================================== */
+    .sub-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--surface2);
+      padding: 4px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .sub-tab-btn {
+      flex: 1;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      background: none;
+      border: none;
+      min-height: 40px;
+    }
+    .sub-tab-btn.active {
+      background: var(--accent);
+      color: #0A0A0A;
+    }
+    .sub-tab-page { display: none; }
+    .sub-tab-page.active { display: block; }
+
+    /* =====================================================
+       MORE SHEET
+    ===================================================== */
+    #more-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      animation: fadeIn 0.15s ease;
+    }
+    #more-overlay.open { display: flex; }
+    #more-sheet {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 16px 16px 0 0;
+      padding: 16px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+      width: 100%;
+      max-width: 480px;
+      animation: sheetUp 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+    .sheet-handle {
+      width: 36px; height: 4px;
+      background: var(--border-strong);
+      border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+    .sheet-section-title {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 14px;
+    }
+    .more-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .more-card {
+      background: var(--surface2);
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      min-height: 88px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .more-card:active { background: var(--surface3); border-color: var(--border-strong); }
+    .more-card-icon { font-size: 22px; line-height: 1; }
+    .more-card-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .more-card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    /* =====================================================
+       SECONDARY PAGES (slide in from right)
+    ===================================================== */
+    .secondary-page {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 150;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      transform: translateX(100%);
+      transition: transform 0.28s cubic-bezier(0.33, 1, 0.68, 1);
+      max-width: 480px;
+      left: 50%;
+      margin-left: -240px;
+    }
+    @media (max-width: 480px) {
+      .secondary-page { left: 0; margin-left: 0; max-width: 100%; }
+    }
+    .secondary-page.open { transform: translateX(0); }
+    .secondary-page-topbar {
+      position: sticky;
+      top: 0;
+      background: rgba(10,10,10,0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      height: 52px;
+      z-index: 1;
+    }
+    .secondary-page-title {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .btn-back {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 0;
+      min-height: 44px;
+      min-width: 60px;
+      text-align: left;
+    }
+    .btn-back:hover { color: var(--text); }
+
+    /* =====================================================
+       STICKY SUBMIT
+    ===================================================== */
+    .sticky-submit {
+      position: sticky;
+      bottom: 0;
+      background: linear-gradient(to top, var(--bg) 75%, transparent);
+      padding: 16px 0 calc(12px + env(safe-area-inset-bottom, 0px));
+      margin-top: 24px;
+    }
 
     /* =====================================================
        CARDS
@@ -277,15 +435,17 @@
     .form-group select,
     .form-group textarea {
       background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 7px;
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
       color: var(--text);
       font-family: var(--font-sans);
-      font-size: 14px;
-      padding: 9px 12px;
+      font-size: 16px; /* prevent iOS zoom */
+      padding: 12px 14px;
+      min-height: 48px;
       outline: none;
       transition: border-color 0.15s;
       width: 100%;
+      -webkit-appearance: none;
     }
     .form-group input:focus,
     .form-group select:focus,
@@ -707,21 +867,12 @@
     }
 
     /* =====================================================
-       MOBILE ACTIVE TAB INDICATOR
+       RESPONSIVE ADJUSTMENTS (desktop only)
     ===================================================== */
-    @media (max-width: 767px) {
-      .tab-btn.active {
-        color: var(--accent);
-        position: relative;
-      }
-      .tab-btn.active::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 20%; right: 20%;
-        height: 2px;
-        background: var(--accent);
-        border-radius: 0 0 2px 2px;
-      }
+    @media (min-width: 768px) {
+      .page-content { padding: 24px 24px 0; }
+      .form-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+      .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
     }
 
     /* =====================================================
@@ -737,9 +888,7 @@
     @media (max-width: 375px) {
       .stat-num { font-size: 1.6rem; }
       h2 { font-size: 1.4rem; }
-    }
-    @media (min-width: 768px) {
-      .page-content { padding: 28px 24px 48px; }
+      .page-content { padding: 16px 16px 0; }
     }
   </style>
 </head>
@@ -754,8 +903,7 @@
   <div class="logo">FORM<span class="accent-dot">.</span></div>
   <div class="header-right">
     <span id="last-export"></span>
-    <button class="header-btn" id="btn-import" onclick="importData()">📥 Import</button>
-    <button class="header-btn accent" id="btn-export" onclick="exportData()">📤 Export</button>
+    <button class="header-btn accent" id="btn-export" onclick="exportData()">↑ Export</button>
     <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="handleImportFile(event)" />
   </div>
 </div>
@@ -764,41 +912,21 @@
      TAB NAVIGATION
 ===================================================== -->
 <nav id="tab-nav">
-  <button class="tab-btn active" data-tab="dashboard">
-    <span class="tab-icon">📊</span>
-    <span class="tab-label">Dashboard</span>
-  </button>
-  <button class="tab-btn" data-tab="today">
+  <button class="tab-btn active" data-tab="today" onclick="switchTab('today')">
     <span class="tab-icon">📋</span>
     <span class="tab-label">Today</span>
   </button>
-  <button class="tab-btn" data-tab="daily">
-    <span class="tab-icon">📝</span>
+  <button class="tab-btn" data-tab="log" onclick="switchTab('log')">
+    <span class="tab-icon">✏️</span>
     <span class="tab-label">Log</span>
   </button>
-  <button class="tab-btn" data-tab="weekly">
-    <span class="tab-icon">🏃</span>
-    <span class="tab-label">Weekly</span>
+  <button class="tab-btn" data-tab="stats" onclick="switchTab('stats')">
+    <span class="tab-icon">📊</span>
+    <span class="tab-label">Stats</span>
   </button>
-  <button class="tab-btn" data-tab="monthly">
-    <span class="tab-icon">📅</span>
-    <span class="tab-label">Monthly</span>
-  </button>
-  <button class="tab-btn" data-tab="photos">
-    <span class="tab-icon">📸</span>
-    <span class="tab-label">Photos</span>
-  </button>
-  <button class="tab-btn" data-tab="goals">
-    <span class="tab-icon">🎯</span>
-    <span class="tab-label">Goals</span>
-  </button>
-  <button class="tab-btn" data-tab="profile">
-    <span class="tab-icon">👤</span>
-    <span class="tab-label">Profile</span>
-  </button>
-  <button class="tab-btn" data-tab="history">
-    <span class="tab-icon">📜</span>
-    <span class="tab-label">History</span>
+  <button class="tab-btn" data-tab="more" onclick="openMoreSheet()">
+    <span class="tab-icon">···</span>
+    <span class="tab-label">More</span>
   </button>
 </nav>
 
@@ -807,24 +935,8 @@
 ===================================================== -->
 <div id="app">
 
-  <!-- PAGE: DASHBOARD -->
-  <div id="tab-dashboard" class="tab-page active">
-    <div class="page-content">
-      <div id="dashboard-content">
-        <div class="coming-soon">
-          <div class="cs-icon">👤</div>
-          <h3>Set Up Your Profile</h3>
-          <p>Enter your details and baseline benchmarks to unlock the dashboard.</p>
-          <div class="mt-16">
-            <button class="btn btn-primary" onclick="switchTab('profile')">Set Up Profile →</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PAGE: TODAY'S PLAN -->
-  <div id="tab-today" class="tab-page">
+  <!-- TAB: TODAY'S PLAN -->
+  <div id="tab-today" class="tab-page active">
     <div class="page-content">
       <div id="today-content">
         <div class="coming-soon">
@@ -835,44 +947,129 @@
     </div>
   </div>
 
-  <!-- PAGE: DAILY LOG -->
-  <div id="tab-daily" class="tab-page">
+  <!-- TAB: LOG (Daily + Weekly) -->
+  <div id="tab-log" class="tab-page">
     <div class="page-content">
-      <div id="daily-content"></div>
+      <div class="sub-tabs">
+        <button class="sub-tab-btn active" data-subtab="log-daily" onclick="switchSubTab('log','daily')">Daily</button>
+        <button class="sub-tab-btn" data-subtab="log-weekly" onclick="switchSubTab('log','weekly')">Weekly</button>
+      </div>
+      <div id="subtab-log-daily" class="sub-tab-page active">
+        <div id="daily-content"></div>
+      </div>
+      <div id="subtab-log-weekly" class="sub-tab-page">
+        <div id="weekly-content"></div>
+      </div>
     </div>
   </div>
 
-  <!-- PAGE: WEEKLY CHECK-IN -->
-  <div id="tab-weekly" class="tab-page">
+  <!-- TAB: STATS (Dashboard + History) -->
+  <div id="tab-stats" class="tab-page">
     <div class="page-content">
-      <div id="weekly-content"></div>
+      <div class="sub-tabs">
+        <button class="sub-tab-btn active" data-subtab="stats-dashboard" onclick="switchSubTab('stats','dashboard')">Dashboard</button>
+        <button class="sub-tab-btn" data-subtab="stats-history" onclick="switchSubTab('stats','history')">History</button>
+      </div>
+      <div id="subtab-stats-dashboard" class="sub-tab-page active">
+        <div id="dashboard-content">
+          <div class="coming-soon">
+            <div class="cs-icon">👤</div>
+            <h3>Set Up Your Profile</h3>
+            <p>Enter your details and baseline benchmarks to unlock the dashboard.</p>
+            <div class="mt-16">
+              <button class="btn btn-primary" onclick="openMorePage('profile')">Set Up Profile →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="subtab-stats-history" class="sub-tab-page">
+        <div id="history-content"></div>
+      </div>
     </div>
   </div>
 
-  <!-- PAGE: MONTHLY ASSESSMENT -->
-  <div id="tab-monthly" class="tab-page">
-    <div class="page-content">
-      <div id="monthly-content"></div>
+</div><!-- end #app -->
+
+<!-- =====================================================
+     MORE SHEET OVERLAY
+===================================================== -->
+<div id="more-overlay" onclick="closeMoreSheet(event)">
+  <div id="more-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-section-title">More</div>
+    <div class="more-grid">
+      <div class="more-card" onclick="openMorePage('monthly')">
+        <span class="more-card-icon">📅</span>
+        <span class="more-card-label">Assessment</span>
+        <span class="more-card-title">Monthly</span>
+      </div>
+      <div class="more-card" onclick="openMorePage('goals')">
+        <span class="more-card-icon">🎯</span>
+        <span class="more-card-label">Targets</span>
+        <span class="more-card-title">Goals</span>
+      </div>
+      <div class="more-card" onclick="openMorePage('photos')">
+        <span class="more-card-icon">📸</span>
+        <span class="more-card-label">Progress</span>
+        <span class="more-card-title">Photos</span>
+      </div>
+      <div class="more-card" onclick="openMorePage('profile')">
+        <span class="more-card-icon">👤</span>
+        <span class="more-card-label">Setup</span>
+        <span class="more-card-title">Profile</span>
+      </div>
     </div>
   </div>
+</div>
 
-  <!-- PAGE: PROGRESS PHOTOS -->
-  <div id="tab-photos" class="tab-page">
-    <div class="page-content">
-      <div id="photos-content"></div>
-    </div>
+<!-- =====================================================
+     SECONDARY PAGES (slide in from right)
+===================================================== -->
+
+<!-- Monthly Assessment -->
+<div id="page-monthly" class="secondary-page">
+  <div class="secondary-page-topbar">
+    <button class="btn-back" onclick="closeSecondaryPage()">← Back</button>
+    <span class="secondary-page-title">Monthly</span>
+    <div style="width:60px"></div>
   </div>
-
-  <!-- PAGE: GOALS -->
-  <div id="tab-goals" class="tab-page">
-    <div class="page-content">
-      <div id="goals-content"></div>
-    </div>
+  <div class="page-content" style="padding-bottom: 40px;">
+    <div id="monthly-content"></div>
   </div>
+</div>
 
-  <!-- PAGE: PROFILE & BASELINE -->
-  <div id="tab-profile" class="tab-page">
-    <div class="page-content">
+<!-- Goals -->
+<div id="page-goals" class="secondary-page">
+  <div class="secondary-page-topbar">
+    <button class="btn-back" onclick="closeSecondaryPage()">← Back</button>
+    <span class="secondary-page-title">Goals</span>
+    <div style="width:60px"></div>
+  </div>
+  <div class="page-content" style="padding-bottom: 40px;">
+    <div id="goals-content"></div>
+  </div>
+</div>
+
+<!-- Progress Photos -->
+<div id="page-photos" class="secondary-page">
+  <div class="secondary-page-topbar">
+    <button class="btn-back" onclick="closeSecondaryPage()">← Back</button>
+    <span class="secondary-page-title">Photos</span>
+    <div style="width:60px"></div>
+  </div>
+  <div class="page-content" style="padding-bottom: 40px;">
+    <div id="photos-content"></div>
+  </div>
+</div>
+
+<!-- Profile & Baseline -->
+<div id="page-profile" class="secondary-page">
+  <div class="secondary-page-topbar">
+    <button class="btn-back" onclick="closeSecondaryPage()">← Back</button>
+    <span class="secondary-page-title">Profile</span>
+    <div style="width:60px"></div>
+  </div>
+    <div class="page-content" style="padding-bottom: 40px;">
       <div class="profile-header">
         <h2>Profile &amp; Baseline</h2>
         <p>Set this up once before you begin. This is the reference point all progress is measured against.</p>
@@ -1031,21 +1228,20 @@
           </div>
         </div>
 
-        <div class="mt-20">
-          <button type="submit" class="btn btn-primary btn-block">💾 Save Profile</button>
+        <div class="sticky-submit">
+          <button type="submit" class="btn btn-primary btn-block">Save Profile</button>
         </div>
       </form>
+      <div class="divider"></div>
+      <div class="form-section">
+        <div class="form-section-title">Data</div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-secondary" style="flex:1" onclick="document.getElementById('import-file-input').click()">↓ Import</button>
+          <button class="btn btn-secondary" style="flex:1" onclick="exportData()">↑ Export</button>
+        </div>
+      </div>
     </div>
   </div>
-
-  <!-- PAGE: HISTORY -->
-  <div id="tab-history" class="tab-page">
-    <div class="page-content">
-      <div id="history-content"></div>
-    </div>
-  </div>
-
-</div><!-- end #app -->
 
 <!-- Toast container -->
 <div id="toast-container"></div>
@@ -1750,30 +1946,106 @@ function showToast(message, type = 'info', duration = 3000) {
 
 
 /* =====================================================
-   TAB NAVIGATION
+   TAB NAVIGATION — 4 primary tabs + More sheet
 ===================================================== */
+
+// Map old tab IDs → new composite structure
+const TAB_MAP = {
+  dashboard: { parent: 'stats', sub: 'dashboard' },
+  history:   { parent: 'stats', sub: 'history' },
+  daily:     { parent: 'log',   sub: 'daily' },
+  weekly:    { parent: 'log',   sub: 'weekly' },
+};
+const SECONDARY_PAGES = ['monthly', 'goals', 'photos', 'profile'];
+
 function switchTab(tabId) {
+  // Route secondary pages to slide-over panels
+  if (SECONDARY_PAGES.includes(tabId)) { openMorePage(tabId); return; }
+
+  // Resolve mapped ID to parent tab
+  const mapped   = TAB_MAP[tabId];
+  const parentId = mapped ? mapped.parent : tabId;
+
+  // Close any open secondary pages
+  closeSecondaryPage();
+
+  // Activate parent tab page + nav button
   document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  const page = document.getElementById('tab-' + tabId);
-  const btn  = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+
+  const page = document.getElementById('tab-' + parentId);
+  const btn  = document.querySelector(`.tab-btn[data-tab="${parentId}"]`);
   if (page) page.classList.add('active');
   if (btn)  btn.classList.add('active');
+
+  // Activate the correct sub-tab
+  if (mapped) switchSubTab(mapped.parent, mapped.sub);
+
   window.scrollTo(0, 0);
+
   // Render dispatch
-  if (tabId === 'dashboard') renderDashboard();
-  if (tabId === 'today')     renderTodayPlan();
-  if (tabId === 'daily')     renderDailyLog();
-  if (tabId === 'weekly')    renderWeeklyCheckin();
-  if (tabId === 'monthly')   renderMonthlyAssessment();
-  if (tabId === 'goals')     renderGoals();
-  if (tabId === 'photos')    renderPhotos();
-  if (tabId === 'history')   renderHistory();
+  const render = {
+    today:     () => renderTodayPlan(),
+    dashboard: () => renderDashboard(),
+    daily:     () => renderDailyLog(),
+    weekly:    () => renderWeeklyCheckin(),
+    history:   () => renderHistory(),
+  };
+  if (render[tabId]) render[tabId]();
+  // If switching directly to a composite tab, render the active sub-tab
+  if (tabId === 'log')   renderDailyLog();
+  if (tabId === 'stats') renderDashboard();
 }
 
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
-});
+function switchSubTab(parent, subId) {
+  const container = document.getElementById('tab-' + parent);
+  if (!container) return;
+  container.querySelectorAll('.sub-tab-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.subtab === parent + '-' + subId));
+  container.querySelectorAll('.sub-tab-page').forEach(p =>
+    p.classList.toggle('active', p.id === `subtab-${parent}-${subId}`));
+  // Trigger render for the newly visible sub-tab
+  if (parent === 'stats' && subId === 'history')   renderHistory();
+  if (parent === 'stats' && subId === 'dashboard') renderDashboard();
+  if (parent === 'log'   && subId === 'weekly')    renderWeeklyCheckin();
+  if (parent === 'log'   && subId === 'daily')     renderDailyLog();
+}
+
+function openMoreSheet() {
+  document.getElementById('more-overlay').classList.add('open');
+  // Deactivate More nav button (it's not a real tab)
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+}
+
+function closeMoreSheet(e) {
+  if (!e || e.target === document.getElementById('more-overlay')) {
+    document.getElementById('more-overlay').classList.remove('open');
+    // Re-activate the last visible primary tab
+    const activeTab = document.querySelector('.tab-page.active');
+    if (activeTab) {
+      const id = activeTab.id.replace('tab-', '');
+      const btn = document.querySelector(`.tab-btn[data-tab="${id}"]`);
+      if (btn) btn.classList.add('active');
+    }
+  }
+}
+
+function openMorePage(pageId) {
+  document.getElementById('more-overlay').classList.remove('open');
+  closeSecondaryPage();
+  const page = document.getElementById('page-' + pageId);
+  if (!page) return;
+  page.classList.add('open');
+  // Render content
+  if (pageId === 'monthly') renderMonthlyAssessment();
+  if (pageId === 'goals')   renderGoals();
+  if (pageId === 'photos')  renderPhotos();
+}
+
+function closeSecondaryPage() {
+  document.querySelectorAll('.secondary-page.open')
+    .forEach(p => p.classList.remove('open'));
+}
 
 
 /* =====================================================
@@ -1857,8 +2129,8 @@ function saveProfile(e) {
   if (storageSet(KEYS.profile, profile)) {
     showToast('Profile saved successfully!', 'success');
     // Refresh dashboard if it's visible
-    const dash = document.getElementById('tab-dashboard');
-    if (dash && dash.classList.contains('active')) renderDashboard();
+    const dashSub = document.getElementById('subtab-stats-dashboard');
+    if (dashSub && dashSub.classList.contains('active')) renderDashboard();
   }
 }
 
@@ -2148,7 +2420,7 @@ function renderDashboard() {
     <!-- YEAR GOAL BANNER -->
     <div class="goal-banner mb-16">
       <div class="goal-banner-label">🎯 Year-End Goal</div>
-      <div class="goal-banner-text">${yearGoal || '<span style="color:var(--muted);font-style:italic">No goal set yet — <a href="#" onclick="switchTab(\'goals\');return false">add your vision →</a></span>'}</div>
+      <div class="goal-banner-text">${yearGoal || '<span style="color:var(--muted);font-style:italic">No goal set yet — <a href="#" onclick="openMorePage(\'goals\');return false">add your vision →</a></span>'}</div>
     </div>
 
     <!-- MONTHLY GOAL PROGRESS -->
@@ -4000,19 +4272,23 @@ function init() {
 
   const p = getProfile();
   if (!p || !p.name) {
-    switchTab('profile');
+    switchTab('today');
+    openMorePage('profile');
     showToast('Welcome! Set up your profile to get started.', 'info', 5000);
   } else {
-    renderDashboard();
+    switchTab('today');
+    renderDashboard(); // pre-load dashboard data
   }
 
-  // Keyboard shortcut: Alt+1..9 to switch tabs
-  const tabIds = ['dashboard','today','daily','weekly','monthly','photos','goals','profile','history'];
+  // Keyboard shortcuts: Alt+1–4
+  const tabIds = ['today', 'log', 'stats'];
   document.addEventListener('keydown', e => {
-    if (e.altKey && e.key >= '1' && e.key <= '9') {
+    if (e.altKey && e.key >= '1' && e.key <= '4') {
       const idx = parseInt(e.key) - 1;
+      if (idx === 3) { openMoreSheet(); return; }
       if (tabIds[idx]) switchTab(tabIds[idx]);
     }
+    if (e.key === 'Escape') { closeSecondaryPage(); closeMoreSheet(null); }
   });
 }
 
