@@ -1,7 +1,8 @@
-const CACHE = 'form-tracker-v1';
+const CACHE = 'form-tracker-v2';
 const ASSETS = [
   '/',
   '/index.html',
+  'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
   'https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap',
 ];
 

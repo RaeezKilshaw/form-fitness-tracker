@@ -2771,6 +2771,101 @@ function renderPlanProgress(pos, hasStartDate) {
     </div>`;
 }
 
+/* ── Monday: last-week summary card ───────────────────── */
+function renderMondaySummary() {
+  const weekly = getWeeklyCheckins();
+  const daily  = getDailyLogs();
+  if (!weekly.length) return '';
+
+  const last = weekly[weekly.length - 1];
+
+  // Sessions logged in the 7 days before today
+  const todayStr  = new Date().toISOString().slice(0, 10);
+  const weekAgo   = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const activeDays = daily.filter(l =>
+    l.date >= weekAgo && l.date < todayStr &&
+    (l.sessions || []).some(s => s !== 'rest')
+  ).length;
+
+  const prStr = last.parkrunTotalSec ? formatTime(last.parkrunTotalSec) : null;
+
+  const stats = [
+    last.totalVolume  ? { label: 'Volume',   value: last.totalVolume + ' km' } : null,
+    prStr             ? { label: 'Parkrun',  value: prStr }                     : null,
+    last.pushups      ? { label: 'Push-Ups', value: last.pushups + ' reps' }    : null,
+    last.pullups      ? { label: 'Pull-Ups', value: last.pullups + ' reps' }    : null,
+    activeDays        ? { label: 'Sessions', value: activeDays + ' days' }      : null,
+  ].filter(Boolean).slice(0, 4);
+
+  if (!stats.length) return '';
+
+  return `
+    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px">
+      <div style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);margin-bottom:12px">Last Week</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        ${stats.map(s => `
+          <div style="background:var(--surface2);border-radius:8px;padding:10px 12px">
+            <div style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--faint);margin-bottom:4px">${s.label}</div>
+            <div style="font-size:1rem;font-weight:700;letter-spacing:-0.02em;color:var(--text)">${s.value}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+/* ── Saturday: parkrun quick-log ──────────────────────── */
+function renderParkrunQuickLog() {
+  return `
+    <div style="border-top:0.5px solid var(--border);margin-top:12px;padding-top:14px">
+      <div style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--faint);margin-bottom:10px">Log Today's Result</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input type="number" id="pr-quick-min" placeholder="27" min="0" max="99"
+               style="width:56px;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;
+                      color:var(--text);font-size:16px;font-weight:700;text-align:center;padding:10px 6px;
+                      -moz-appearance:textfield;outline:none" />
+        <span style="font-family:var(--font-mono);font-size:1.1rem;color:var(--muted);font-weight:700">:</span>
+        <input type="number" id="pr-quick-sec" placeholder="14" min="0" max="59"
+               style="width:56px;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;
+                      color:var(--text);font-size:16px;font-weight:700;text-align:center;padding:10px 6px;
+                      -moz-appearance:textfield;outline:none" />
+        <button class="btn btn-primary btn-sm" onclick="logParkrunQuick()" style="flex:1">Save time</button>
+      </div>
+      <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--faint);margin-top:6px;letter-spacing:0.04em">
+        Saves to daily log · fill full weekly check-in on Sunday
+      </div>
+    </div>`;
+}
+
+function logParkrunQuick() {
+  const min = parseInt(document.getElementById('pr-quick-min').value) || 0;
+  const sec = parseInt(document.getElementById('pr-quick-sec').value) || 0;
+  if (!min && !sec) { showToast('Enter your parkrun time first.', 'error'); return; }
+
+  const today = new Date().toISOString().slice(0, 10);
+  const timeStr = `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+
+  // Save to daily log (add parkrun session, note the time)
+  const logs = getDailyLogs();
+  const idx  = logs.findIndex(l => l.date === today);
+  if (idx >= 0) {
+    logs[idx].sessions = [...new Set([...logs[idx].sessions, 'parkrun'])];
+    if (!logs[idx].notes) logs[idx].notes = `Parkrun: ${timeStr}`;
+  } else {
+    logs.push({
+      id: Date.now(), date: today,
+      sessions: ['parkrun'], restingHR: null,
+      energyAM: 7, energyPM: null,
+      pushups: null, pullups: null, plank: null,
+      notes: `Parkrun: ${timeStr}`
+    });
+  }
+  storageSet(KEYS.daily, logs);
+
+  // Stash time so weekly check-in can pre-fill it
+  sessionStorage.setItem('prefill_parkrun', JSON.stringify({ min, sec }));
+
+  showToast(`Parkrun ${timeStr} logged! Open Weekly Check-in to log full run data.`, 'success', 4000);
+}
+
 /* ── Fix 5: Recovery alert surfaces on Thu/Fri ─────────── */
 function renderRecoveryAlert(dayKey) {
   if (dayKey !== 'thursday' && dayKey !== 'friday') return '';
@@ -2872,7 +2967,9 @@ function renderTodaySessions(sched, workouts, dayKey, phase, pos) {
   // Fix 2: Rest day — am is null/empty OR explicitly says "rest"
   const isRestDay = !sched.am || amText.includes('rest');
   if (isRestDay && !sched.pm) {
-    return `<div class="session-block" style="text-align:center;padding:32px">
+    // Monday: show last-week summary above the rest card
+    const summary = dayKey === 'monday' ? renderMondaySummary() : '';
+    return summary + `<div class="session-block" style="text-align:center;padding:32px">
       <div style="font-size:32px">😴</div>
       <h3 style="margin-top:8px">Rest Day</h3>
       <p style="margin-top:4px">${sched.am || 'Full rest — recovery is training.'}</p>
@@ -2907,6 +3004,7 @@ function renderTodaySessions(sched, workouts, dayKey, phase, pos) {
             <div style="font-size:1rem;font-weight:700;color:var(--accent);letter-spacing:-0.02em;margin-top:2px">${target}</div>
           </div>
         </div>` : ''}
+      ${dayKey === 'saturday' ? renderParkrunQuickLog() : ''}
     </div>`;
 
   } else if (sched.am) {
@@ -3486,6 +3584,11 @@ function renderRecentDaily() {
 function renderWeeklyCheckin() {
   const el = document.getElementById('weekly-content');
 
+  // Pick up parkrun quick-log prefill from Today tab
+  let parkrunPrefill = null;
+  try { parkrunPrefill = JSON.parse(sessionStorage.getItem('prefill_parkrun') || 'null'); } catch(e) {}
+  if (parkrunPrefill) sessionStorage.removeItem('prefill_parkrun');
+
   // Most recent Sunday
   const now  = new Date();
   const dow  = now.getDay(); // 0=Sun
@@ -3645,6 +3748,16 @@ function renderWeeklyCheckin() {
     <div class="section-heading">Recent Check-Ins</div>
     <div id="wc-recent">${renderRecentWeekly()}</div>
   `;
+
+  // Pre-fill parkrun time if arriving from Saturday quick-log
+  if (parkrunPrefill) {
+    const minEl = document.getElementById('wc-pr-min');
+    const secEl = document.getElementById('wc-pr-sec');
+    if (minEl) minEl.value = parkrunPrefill.min;
+    if (secEl) secEl.value = parkrunPrefill.sec;
+    calcWeeklyVolume();
+    showToast('Parkrun time pre-filled from today\'s quick log.', 'info');
+  }
 }
 
 function calcWeeklyVolume() {
