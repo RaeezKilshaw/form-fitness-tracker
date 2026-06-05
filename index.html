@@ -516,7 +516,137 @@
     .btn-sm { padding: 6px 14px; font-size: 0.85rem; }
 
     /* =====================================================
-       TABLES
+       EXERCISE CARD LIST (replaces overflow table on Today tab)
+    ===================================================== */
+    .ex-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .ex-row {
+      background: var(--surface);
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .ex-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .ex-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+      flex: 1;
+      min-width: 0;
+    }
+    .ex-chip {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .ex-sub {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .ex-rest {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.06em;
+      color: var(--faint);
+      text-transform: uppercase;
+    }
+    .ex-note {
+      font-size: 0.75rem;
+      color: var(--faint);
+      font-style: italic;
+      min-width: 0;
+    }
+
+    /* =====================================================
+       ACTIVITY HEATMAP (GitHub-style)
+    ===================================================== */
+    .activity-wrap {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+    .activity-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .activity-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .activity-count {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+    .activity-grid-scroll {
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+    .activity-grid-scroll::-webkit-scrollbar { display: none; }
+    .activity-grid {
+      display: flex;
+      gap: 3px;
+      width: max-content;
+    }
+    .activity-col {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .activity-cell {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .activity-cell.level-0 { background: var(--surface2); }
+    .activity-cell.level-1 { background: rgba(200,245,66,0.25); }
+    .activity-cell.level-2 { background: rgba(200,245,66,0.55); }
+    .activity-cell.level-3 { background: var(--accent); }
+    .activity-cell.level-x { background: transparent; }
+    .activity-legend {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 10px;
+      justify-content: flex-end;
+    }
+    .activity-legend-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--faint);
+      letter-spacing: 0.06em;
+    }
+
+    /* =====================================================
+       TABLES (reference panels — scrollable is acceptable here)
     ===================================================== */
     .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -1007,12 +1137,7 @@
         <span class="more-card-label">Targets</span>
         <span class="more-card-title">Goals</span>
       </div>
-      <div class="more-card" onclick="openMorePage('photos')">
-        <span class="more-card-icon">📸</span>
-        <span class="more-card-label">Progress</span>
-        <span class="more-card-title">Photos</span>
-      </div>
-      <div class="more-card" onclick="openMorePage('profile')">
+<div class="more-card" onclick="openMorePage('profile')">
         <span class="more-card-icon">👤</span>
         <span class="more-card-label">Setup</span>
         <span class="more-card-title">Profile</span>
@@ -1046,18 +1171,6 @@
   </div>
   <div class="page-content" style="padding-bottom: 40px;">
     <div id="goals-content"></div>
-  </div>
-</div>
-
-<!-- Progress Photos -->
-<div id="page-photos" class="secondary-page">
-  <div class="secondary-page-topbar">
-    <button class="btn-back" onclick="closeSecondaryPage()">← Back</button>
-    <span class="secondary-page-title">Photos</span>
-    <div style="width:60px"></div>
-  </div>
-  <div class="page-content" style="padding-bottom: 40px;">
-    <div id="photos-content"></div>
   </div>
 </div>
 
@@ -1955,7 +2068,7 @@ const TAB_MAP = {
   daily:     { parent: 'log',   sub: 'daily' },
   weekly:    { parent: 'log',   sub: 'weekly' },
 };
-const SECONDARY_PAGES = ['monthly', 'goals', 'photos', 'profile'];
+const SECONDARY_PAGES = ['monthly', 'goals', 'profile'];
 
 function switchTab(tabId) {
   // Route secondary pages to slide-over panels
@@ -2038,7 +2151,6 @@ function openMorePage(pageId) {
   // Render content
   if (pageId === 'monthly') renderMonthlyAssessment();
   if (pageId === 'goals')   renderGoals();
-  if (pageId === 'photos')  renderPhotos();
 }
 
 function closeSecondaryPage() {
@@ -2298,6 +2410,66 @@ function makeChart(key, ctx, type, labels, datasets, options = {}) {
   });
 }
 
+/* =====================================================
+   ACTIVITY HEATMAP
+===================================================== */
+function buildActivityGrid() {
+  const logs = getDailyLogs();
+  const logMap = {};
+  logs.forEach(l => {
+    const count = (l.sessions || []).filter(s => s !== 'rest').length;
+    if (count > 0) logMap[l.date] = count;
+  });
+
+  const today = new Date();
+  const start = new Date(today);
+  start.setFullYear(today.getFullYear() - 1);
+  start.setDate(start.getDate() - start.getDay()); // align to Sunday
+
+  const weeks = [];
+  const d = new Date(start);
+  while (d <= today) {
+    const week = [];
+    for (let i = 0; i < 7; i++) {
+      const iso = d.toISOString().slice(0, 10);
+      const future = d > today;
+      week.push({ iso, count: logMap[iso] || 0, future });
+      d.setDate(d.getDate() + 1);
+    }
+    weeks.push(week);
+  }
+
+  const totalActive = Object.keys(logMap).length;
+
+  return `
+    <div class="activity-wrap">
+      <div class="activity-header">
+        <span class="activity-label">Training Activity</span>
+        <span class="activity-count">${totalActive} day${totalActive !== 1 ? 's' : ''} logged</span>
+      </div>
+      <div class="activity-grid-scroll">
+        <div class="activity-grid">
+          ${weeks.map(w => `
+            <div class="activity-col">
+              ${w.map(day => `
+                <div class="activity-cell level-${day.future ? 'x' : Math.min(day.count, 3)}"
+                     title="${day.iso}${day.count ? ' · ' + day.count + ' session' + (day.count !== 1 ? 's' : '') : ''}"></div>`
+              ).join('')}
+            </div>`
+          ).join('')}
+        </div>
+      </div>
+      <div class="activity-legend">
+        <span class="activity-legend-label">Less</span>
+        <div class="activity-cell level-0"></div>
+        <div class="activity-cell level-1"></div>
+        <div class="activity-cell level-2"></div>
+        <div class="activity-cell level-3"></div>
+        <span class="activity-legend-label">More</span>
+      </div>
+    </div>`;
+}
+
 function renderDashboard() {
   const p       = getProfile();
   const weekly  = getWeeklyCheckins();
@@ -2444,6 +2616,9 @@ function renderDashboard() {
       ${todaySched.pm ? `<div style="font-size:12px;color:var(--muted);margin-top:4px">PM: ${todaySched.pm}</div>` : ''}
       ${todaySched.duration ? `<div style="font-size:11px;color:var(--muted);margin-top:4px">⏱ ${todaySched.duration}</div>` : ''}
     </div>
+
+    <!-- ACTIVITY HEATMAP -->
+    ${buildActivityGrid()}
 
     <!-- STAT CARDS -->
     <div class="section-heading">Performance Stats</div>
@@ -2734,19 +2909,22 @@ function renderWorkoutTable(workout) {
     html += `<div class="text-xs" style="color:var(--amber);background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:6px;padding:8px 10px;margin-bottom:10px">${workout.note}</div>`;
   }
 
-  // Exercises table
+  // Exercise card list — no horizontal scroll
   if (workout.exercises && workout.exercises.length) {
-    html += `<div class="table-wrap"><table>
-      <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Rest</th><th>Notes</th></tr></thead>
-      <tbody>${workout.exercises.map(ex => `
-        <tr>
-          <td style="font-weight:500">${ex.name}</td>
-          <td>${ex.sets}</td>
-          <td>${ex.reps}</td>
-          <td>${ex.rest}</td>
-          <td style="color:var(--muted);font-size:12px">${ex.notes || ''}</td>
-        </tr>`).join('')}
-      </tbody></table></div>`;
+    html += `<div class="ex-list">
+      ${workout.exercises.map(ex => `
+        <div class="ex-row">
+          <div class="ex-main">
+            <span class="ex-name">${ex.name}</span>
+            <span class="ex-chip">${ex.sets} × ${ex.reps}</span>
+          </div>
+          ${ex.rest || ex.notes ? `
+          <div class="ex-sub">
+            ${ex.rest  ? `<span class="ex-rest">${ex.rest} rest</span>` : ''}
+            ${ex.notes ? `<span class="ex-note">${ex.notes}</span>`    : ''}
+          </div>` : ''}
+        </div>`).join('')}
+    </div>`;
   }
 
   // KB fundamentals progression table
@@ -3877,191 +4055,6 @@ function deleteGoal(id) {
 }
 
 
-/* =====================================================
-   PROGRESS PHOTOS — RENDER, UPLOAD, DELETE
-===================================================== */
-function renderPhotos() {
-  const el = document.getElementById('photos-content');
-  el.innerHTML = `
-    <h2 style="margin-bottom:4px">Progress Photos</h2>
-    <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:20px;display:flex;gap:8px;align-items:flex-start">
-      <span>⚠️</span>
-      <span><strong>Storage notice:</strong> Photos are stored in your browser as base64 data. Export your data regularly. If the app slows down, export and delete older photo entries.</span>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr;gap:24px">
-
-      <!-- WEEKLY PHOTOS -->
-      <div>
-        <div class="section-heading">Weekly Photos</div>
-        <div class="card mb-16">
-          <div class="card-title">Add Weekly Photo</div>
-          <div class="form-grid cols-2">
-            <div class="form-group">
-              <label>Date (default: most recent Saturday)</label>
-              <input type="date" id="ph-weekly-date" value="${lastSaturday()}" />
-            </div>
-            <div class="form-group">
-              <label>Label</label>
-              <input type="text" id="ph-weekly-label" placeholder="e.g. Week 3 — Front" />
-            </div>
-          </div>
-          <div class="form-group mt-12">
-            <label>Photo (images only)</label>
-            <input type="file" id="ph-weekly-file" accept="image/*" style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:13px;padding:8px 10px;width:100%;cursor:pointer" />
-          </div>
-          <button class="btn btn-primary mt-12" onclick="uploadPhoto('weekly')">📸 Add Weekly Photo</button>
-        </div>
-        <div id="ph-weekly-gallery">${renderPhotoGallery('weekly')}</div>
-      </div>
-
-      <!-- MONTHLY PHOTOS -->
-      <div>
-        <div class="section-heading">Monthly Photos</div>
-        <div class="card mb-16">
-          <div class="card-title">Add Monthly Photo</div>
-          <div class="form-grid cols-2">
-            <div class="form-group">
-              <label>Plan Month</label>
-              <select id="ph-monthly-month">
-                ${Array.from({length:12},(_,i)=>`<option value="${i+1}">Month ${i+1}</option>`).join('')}
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Label</label>
-              <input type="text" id="ph-monthly-label" placeholder="e.g. Month 2 — Front" />
-            </div>
-          </div>
-          <div class="form-group mt-12">
-            <label>Photo (images only)</label>
-            <input type="file" id="ph-monthly-file" accept="image/*" style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:13px;padding:8px 10px;width:100%;cursor:pointer" />
-          </div>
-          <button class="btn btn-primary mt-12" onclick="uploadPhoto('monthly')">📸 Add Monthly Photo</button>
-        </div>
-        <div id="ph-monthly-gallery">${renderPhotoGallery('monthly')}</div>
-      </div>
-
-    </div>
-
-    <!-- LIGHTBOX -->
-    <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9998;align-items:center;justify-content:center;flex-direction:column;gap:12px" onclick="closeLightbox(event)">
-      <img id="lightbox-img" style="max-width:92vw;max-height:80vh;border-radius:8px;object-fit:contain" />
-      <div id="lightbox-label" style="color:#ccc;font-size:13px"></div>
-      <button onclick="document.getElementById('lightbox').style.display='none'" style="position:absolute;top:16px;right:20px;background:transparent;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1">✕</button>
-    </div>
-  `;
-}
-
-function lastSaturday() {
-  const d = new Date();
-  const day = d.getDay(); // 0=Sun,6=Sat
-  const diff = day === 6 ? 0 : (day + 1);
-  d.setDate(d.getDate() - diff);
-  return d.toISOString().slice(0,10);
-}
-
-function uploadPhoto(type) {
-  const fileInput = document.getElementById(`ph-${type}-file`);
-  const file = fileInput.files[0];
-  if (!file) { showToast('Please select a photo first.', 'error'); return; }
-  if (!file.type.startsWith('image/')) { showToast('Only image files are supported.', 'error'); return; }
-
-  const label = type === 'weekly'
-    ? (document.getElementById('ph-weekly-label').value.trim() || 'Weekly Photo')
-    : (document.getElementById('ph-monthly-label').value.trim() || `Month ${document.getElementById('ph-monthly-month').value} Photo`);
-
-  const date = type === 'weekly'
-    ? document.getElementById('ph-weekly-date').value
-    : new Date().toISOString().slice(0,10);
-
-  const month = type === 'monthly'
-    ? parseInt(document.getElementById('ph-monthly-month').value)
-    : null;
-
-  const reader = new FileReader();
-  reader.onload = ev => {
-    // Compress: draw onto canvas at max 800px wide
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const maxW = 800;
-      const scale = img.width > maxW ? maxW / img.width : 1;
-      canvas.width  = Math.round(img.width  * scale);
-      canvas.height = Math.round(img.height * scale);
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      const compressed = canvas.toDataURL('image/jpeg', 0.78);
-
-      const key   = type === 'weekly' ? KEYS.photosWeekly : KEYS.photosMonthly;
-      const store = storageGet(key) || [];
-      store.unshift({ id: Date.now(), date, label, month, src: compressed });
-      if (storageSet(key, store)) {
-        showToast('Photo saved!', 'success');
-        // Reset inputs
-        fileInput.value = '';
-        if (type === 'weekly') {
-          document.getElementById('ph-weekly-label').value = '';
-        } else {
-          document.getElementById('ph-monthly-label').value = '';
-        }
-        document.getElementById(`ph-${type}-gallery`).innerHTML = renderPhotoGallery(type);
-        // Re-bind lightbox after re-render
-      }
-    };
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-function renderPhotoGallery(type) {
-  const key   = type === 'weekly' ? KEYS.photosWeekly : KEYS.photosMonthly;
-  const store = storageGet(key) || [];
-  if (!store.length) return `<p class="text-sm text-muted">No ${type} photos yet.</p>`;
-
-  const cards = store.map(p => `
-    <div style="position:relative;cursor:pointer" onclick="openLightbox('${type}',${p.id})">
-      <img src="${p.src}" alt="${p.label}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;border:1px solid var(--border);display:block" loading="lazy" />
-      <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.75));border-radius:0 0 8px 8px;padding:6px 8px">
-        <div style="font-size:11px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.label}</div>
-        <div style="font-size:10px;color:#aaa">${formatDateDisplay(p.date)}${p.month ? ` · M${p.month}` : ''}</div>
-      </div>
-      <button onclick="event.stopPropagation();deletePhoto('${type}',${p.id})" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.6);border:none;color:#fff;font-size:14px;width:24px;height:24px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1">✕</button>
-    </div>`).join('');
-
-  return `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px">${cards}</div>`;
-}
-
-function openLightbox(type, id) {
-  const key   = type === 'weekly' ? KEYS.photosWeekly : KEYS.photosMonthly;
-  const store = storageGet(key) || [];
-  const photo = store.find(p => p.id === id);
-  if (!photo) return;
-  const lb = document.getElementById('lightbox');
-  document.getElementById('lightbox-img').src = photo.src;
-  document.getElementById('lightbox-label').textContent = `${photo.label} · ${formatDateDisplay(photo.date)}`;
-  lb.style.display = 'flex';
-}
-
-function closeLightbox(e) {
-  if (e.target.id === 'lightbox') document.getElementById('lightbox').style.display = 'none';
-}
-
-function deletePhoto(type, id) {
-  if (!confirm('Delete this photo? This cannot be undone.')) return;
-  const key   = type === 'weekly' ? KEYS.photosWeekly : KEYS.photosMonthly;
-  const store = (storageGet(key) || []).filter(p => p.id !== id);
-  storageSet(key, store);
-  showToast('Photo deleted.', 'info');
-  document.getElementById(`ph-${type}-gallery`).innerHTML = renderPhotoGallery(type);
-}
-
-// ESC closes lightbox
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    const lb = document.getElementById('lightbox');
-    if (lb) lb.style.display = 'none';
-  }
-});
 
 
 /* =====================================================
@@ -4076,7 +4069,7 @@ function renderHistory() {
 
     <!-- FILTER BAR -->
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px" id="history-filters">
-      ${['All','Daily','Weekly','Monthly','Photos'].map(f => `
+      ${['All','Daily','Weekly','Monthly'].map(f => `
         <button class="history-filter-btn ${f==='All'?'active':''}" data-filter="${f.toLowerCase()}"
           style="padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:${f==='All'?'var(--accent)':'var(--surface2)'};color:${f==='All'?'#000':'var(--muted)'};font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif">
           ${f}
@@ -4110,16 +4103,11 @@ function buildHistoryList(filter) {
   const weekly  = getWeeklyCheckins().map(e => ({ ...e, _type: 'weekly',  _date: e.weekEnding }));
   const monthly = getMonthlyAssessments().map(e => ({ ...e, _type: 'monthly', _date: e.date }));
 
-  const wPhotos = (storageGet(KEYS.photosWeekly) || []).map(e => ({ ...e, _type: 'photo', _date: e.date }));
-  const mPhotos = (storageGet(KEYS.photosMonthly) || []).map(e => ({ ...e, _type: 'photo', _date: e.date }));
-  const photos  = [...wPhotos, ...mPhotos];
-
-  let all = [...daily, ...weekly, ...monthly, ...photos]
+  let all = [...daily, ...weekly, ...monthly]
     .sort((a,b) => new Date(b._date||0) - new Date(a._date||0));
 
   if (filter !== 'all') {
-    const typeMap = { daily:'daily', weekly:'weekly', monthly:'monthly', photos:'photo' };
-    all = all.filter(e => e._type === (typeMap[filter] || filter));
+    all = all.filter(e => e._type === filter);
   }
 
   const listEl = document.getElementById('history-list');
@@ -4144,7 +4132,6 @@ function buildHistoryCard(e, i) {
     daily:   { label:'DAILY',   badgeClass:'badge-blue',   icon:'📝' },
     weekly:  { label:'WEEKLY',  badgeClass:'badge-green',  icon:'🏃' },
     monthly: { label:'MONTHLY', badgeClass:'badge-amber',  icon:'📅' },
-    photo:   { label:'PHOTO',   badgeClass:'badge-orange', icon:'📸' }
   };
   const cfg = typeCfg[e._type] || { label:'ENTRY', badgeClass:'badge-orange', icon:'📌' };
 
@@ -4214,13 +4201,6 @@ function buildHistoryCard(e, i) {
       ${e.notes ? `<div class="text-sm text-muted" style="font-style:italic">"${e.notes}"</div>` : ''}`;
   }
 
-  else if (e._type === 'photo') {
-    summary = e.label || 'Photo';
-    detail = `
-      <img src="${e.src}" alt="${e.label}" style="max-width:200px;max-height:200px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer"
-        onclick="openLightboxDirect('${e.src}','${(e.label||'').replace(/'/g,"\\'")} · ${formatDateDisplay(e.date)}')" />`;
-  }
-
   return `
     <div class="card mb-8" style="padding:0;overflow:hidden">
       <div class="history-card-header" style="padding:12px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px">
@@ -4238,13 +4218,6 @@ function buildHistoryCard(e, i) {
     </div>`;
 }
 
-function openLightboxDirect(src, label) {
-  const lb = document.getElementById('lightbox');
-  if (!lb) return;
-  document.getElementById('lightbox-img').src = src;
-  document.getElementById('lightbox-label').textContent = label;
-  lb.style.display = 'flex';
-}
 
 
 /* =====================================================
