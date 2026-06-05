@@ -576,6 +576,19 @@
     }
 
     /* =====================================================
+       WEEK PIP DOTS (plan progress)
+    ===================================================== */
+    .week-pip {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--surface3);
+      flex-shrink: 0;
+    }
+    .week-pip.done    { background: rgba(200,245,66,0.5); }
+    .week-pip.current { background: var(--accent); box-shadow: 0 0 0 3px rgba(200,245,66,0.2); }
+
+    /* =====================================================
        ACTIVITY HEATMAP (GitHub-style)
     ===================================================== */
     .activity-wrap {
@@ -2616,27 +2629,95 @@ function buildDashboardCharts(weekly, monthly, daily) {
 /* =====================================================
    TODAY'S PLAN — RENDER
 ===================================================== */
+/* ── Fix 4: Phase + week progress bar ─────────────────── */
+function renderPlanProgress(pos, hasStartDate) {
+  const totalWeeks = 24; // 6 months × 4 weeks
+  const weeksDone  = ((pos.month - 1) * 4) + (pos.weekInMonth - 1);
+  const pct        = Math.round((weeksDone / totalWeeks) * 100);
+
+  // 4 pips for the current month's weeks
+  const pips = [1,2,3,4].map(w => {
+    if (w < pos.weekInMonth)  return `<div class="week-pip done"></div>`;
+    if (w === pos.weekInMonth) return `<div class="week-pip current"></div>`;
+    return `<div class="week-pip"></div>`;
+  }).join('');
+
+  return `
+    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <div style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);margin-bottom:4px">Month ${pos.month} of 6</div>
+          <div style="font-size:0.95rem;font-weight:700;color:var(--text);letter-spacing:-0.01em">${pos.phase.name}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px">Week ${pos.weekInMonth} of 4</div>
+          <div style="display:flex;gap:5px;justify-content:flex-end">${pips}</div>
+        </div>
+      </div>
+      <div style="height:2px;background:var(--surface3);border-radius:2px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:var(--accent);border-radius:2px;transition:width 0.4s ease"></div>
+      </div>
+      <div style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.06em;color:var(--faint);margin-top:6px">${weeksDone} of ${totalWeeks} weeks complete · ${pct}%</div>
+    </div>`;
+}
+
+/* ── Fix 5: Recovery alert surfaces on Thu/Fri ─────────── */
+function renderRecoveryAlert(dayKey) {
+  if (dayKey !== 'thursday' && dayKey !== 'friday') return '';
+  const label = dayKey === 'thursday'
+    ? 'Check your resting HR before training — this determines if Thursday PM run happens.'
+    : 'KB + plyo yesterday. Check resting HR before Friday session.';
+  return `
+    <div style="background:var(--surface);border:0.5px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:12px 14px;margin-bottom:16px">
+      <div style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px">💓 Recovery Check</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">${label}</div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        ${PLAN_DATA.recoveryLoadTable.map(r => `
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--border)">
+            <span style="font-size:12px;color:var(--muted);flex:1">${r.signal}</span>
+            <span style="font-family:var(--font-mono);font-size:11px;color:var(--accent);text-align:right;flex-shrink:0">${r.action}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
 function renderTodayPlan() {
-  const p    = getProfile();
-  const pos  = getCurrentPlanPosition(p.startDate);
-  const phase = pos.phase;
+  const p      = getProfile();
+  const pos    = getCurrentPlanPosition(p.startDate);
+  const phase  = pos.phase;
   const dayKey = getTodayDayKey();
   const sched  = phase.weeklySchedule[dayKey] || {};
   const dayNames = { monday:'Monday', tuesday:'Tuesday', wednesday:'Wednesday', thursday:'Thursday', friday:'Friday', saturday:'Saturday', sunday:'Sunday' };
-
-  // Figure out which workout(s) to show today
   const todayWorkouts = getTodayWorkouts(phase, dayKey, pos.weekInMonth);
+
+  // Fix 6: first-visit prompt when no start date is set
+  const noStartDate = !p.startDate;
+  const setupPrompt = noStartDate ? `
+    <div style="background:rgba(200,245,66,0.06);border:0.5px solid rgba(200,245,66,0.25);border-radius:12px;padding:16px;margin-bottom:16px;display:flex;align-items:flex-start;gap:12px">
+      <div style="font-size:20px;flex-shrink:0">📍</div>
+      <div style="flex:1">
+        <div style="font-size:0.875rem;font-weight:700;color:var(--text);margin-bottom:4px">Set your plan start date</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5">Go to <strong style="color:var(--text)">More → Profile</strong> to enter when you started the plan. This unlocks week-by-week targets and accurate phase tracking.</div>
+        <button class="btn btn-secondary btn-sm" onclick="openMorePage('profile')" style="font-size:12px">Open Profile →</button>
+      </div>
+    </div>` : '';
 
   const el = document.getElementById('today-content');
   el.innerHTML = `
     <!-- TODAY HEADER -->
-    <div class="flex justify-between items-center mb-16" style="flex-wrap:wrap;gap:8px">
-      <div>
-        <h2>${dayNames[dayKey] || ''}</h2>
-        <span class="badge badge-orange" style="margin-top:6px;display:inline-flex">${getPhaseBadge(pos.month)} · Week ${pos.weekInMonth}</span>
-      </div>
-      <button class="btn btn-primary btn-sm" onclick="prefillDailyLog()">✓ Mark Today Complete</button>
+    <div class="flex justify-between items-center mb-12" style="flex-wrap:wrap;gap:8px">
+      <h2>${dayNames[dayKey] || ''}</h2>
+      <button class="btn btn-primary btn-sm" onclick="prefillDailyLog()">✓ Log Today</button>
     </div>
+
+    <!-- Fix 6: setup prompt -->
+    ${setupPrompt}
+
+    <!-- Fix 4: phase + week progress -->
+    ${renderPlanProgress(pos, !noStartDate)}
+
+    <!-- Fix 5: recovery alert (Thu/Fri only) -->
+    ${renderRecoveryAlert(dayKey)}
 
     <!-- TODAY SESSIONS -->
     ${renderTodaySessions(sched, todayWorkouts, dayKey, phase, pos)}
@@ -2662,7 +2743,6 @@ function renderTodayPlan() {
     </div>
   `;
 
-  // Bind accordion toggles
   el.querySelectorAll('.accordion-header').forEach(btn => {
     btn.addEventListener('click', () => {
       const body = btn.nextElementSibling;
