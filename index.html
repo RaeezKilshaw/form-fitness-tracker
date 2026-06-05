@@ -2639,7 +2639,7 @@ function renderTodayPlan() {
     </div>
 
     <!-- TODAY SESSIONS -->
-    ${renderTodaySessions(sched, todayWorkouts, dayKey, phase)}
+    ${renderTodaySessions(sched, todayWorkouts, dayKey, phase, pos)}
 
     <div class="divider"></div>
 
@@ -2672,19 +2672,52 @@ function renderTodayPlan() {
   });
 }
 
-function renderTodaySessions(sched, workouts, dayKey, phase) {
-  if (!sched.am && !sched.pm) {
+function renderTodaySessions(sched, workouts, dayKey, phase, pos) {
+  const runKeywords = ['run','jog','parkrun','lsd','zone 2','tempo'];
+  const amText = (sched.am || '').toLowerCase();
+
+  // Fix 2: Rest day — am is null/empty OR explicitly says "rest"
+  const isRestDay = !sched.am || amText.includes('rest');
+  if (isRestDay && !sched.pm) {
     return `<div class="session-block" style="text-align:center;padding:32px">
       <div style="font-size:32px">😴</div>
-      <h3 style="margin-top:8px">Full Rest Day</h3>
-      <p style="margin-top:4px">Monday is non-negotiable recovery after the Sat/Sun run block.</p>
+      <h3 style="margin-top:8px">Rest Day</h3>
+      <p style="margin-top:4px">${sched.am || 'Full rest — recovery is training.'}</p>
+      ${sched.duration ? `<p class="text-xs text-muted mt-8">⏱ ${sched.duration}</p>` : ''}
     </div>`;
   }
 
+  // Fix 1: Run day — am session is a run (not a gym session)
+  const isRunDay = sched.am && runKeywords.some(k => amText.includes(k));
+
   let html = '';
 
-  // AM session
-  if (sched.am) {
+  if (isRunDay) {
+    // Pull this week's specific run target from the running plan
+    const weeks = phase.runningPlan?.weeks || [];
+    const weekIdx = Math.min((pos?.weekInMonth || 1) - 1, weeks.length - 1);
+    const weekData = weeks[weekIdx] || {};
+    const target = dayKey === 'wednesday' ? weekData.wed
+                 : dayKey === 'saturday'  ? weekData.satParkrun
+                 : dayKey === 'sunday'    ? weekData.sunLSD
+                 : null;
+
+    html += `<div class="session-block">
+      <div class="session-block-title"><span>🏃 Run Session</span><span class="session-tag">MORNING</span></div>
+      <div style="font-size:13px;color:var(--text);margin-bottom:8px">${sched.am}</div>
+      ${sched.duration ? `<div class="text-xs text-muted mb-12">⏱ ${sched.duration}</div>` : ''}
+      ${target ? `
+        <div style="display:flex;align-items:center;gap:12px;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:10px 14px;margin-top:4px">
+          <div style="width:3px;height:36px;background:var(--accent);border-radius:2px;flex-shrink:0"></div>
+          <div>
+            <div style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint)">Week ${pos?.weekInMonth || 1} target</div>
+            <div style="font-size:1rem;font-weight:700;color:var(--accent);letter-spacing:-0.02em;margin-top:2px">${target}</div>
+          </div>
+        </div>` : ''}
+    </div>`;
+
+  } else if (sched.am) {
+    // Gym / calisthenics / KB session
     html += `<div class="session-block">
       <div class="session-block-title"><span>🏋️ AM Session</span><span class="session-tag">MORNING</span></div>
       <div style="font-size:13px;color:var(--text);margin-bottom:12px">${sched.am}</div>
@@ -2695,15 +2728,18 @@ function renderTodaySessions(sched, workouts, dayKey, phase) {
 
   // PM session
   if (sched.pm) {
-    const isRun = sched.pm.toLowerCase().includes('run') || sched.pm.toLowerCase().includes('jog');
-    html += `<div class="session-block" style="border-color:#1e3a5f">
-      <div class="session-block-title" style="color:#60a5fa"><span>${isRun ? '🏃' : '💪'} PM Session</span><span class="session-tag" style="background:rgba(96,165,250,0.15);color:#60a5fa">EVENING</span></div>
+    const isPMRun = sched.pm.toLowerCase().includes('run') || sched.pm.toLowerCase().includes('jog');
+    html += `<div class="session-block" style="border-color:rgba(96,165,250,0.25)">
+      <div class="session-block-title" style="color:#60a5fa">
+        <span>${isPMRun ? '🏃' : '💪'} PM Session</span>
+        <span class="session-tag" style="background:rgba(96,165,250,0.12);color:#60a5fa">EVENING</span>
+      </div>
       <div style="font-size:13px;color:var(--text);margin-bottom:8px">${sched.pm}</div>
       ${renderPMRunNote(dayKey, phase)}
     </div>`;
   }
 
-  // Injury flags for this day
+  // Injury flags
   const flags = getDayInjuryFlags(dayKey, phase);
   if (flags.length) {
     html += flags.map(f => `<div class="injury-flag">⚠️ <span>${f}</span></div>`).join('');
@@ -3086,16 +3122,16 @@ function renderDailyLog() {
         <div class="form-section-title">Sessions Completed</div>
         <div id="dl-sessions" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
           ${[
-            ['am_calisthenics','AM Calisthenics','🏋️'],
-            ['pm_easy_run','PM Easy Run','🏃'],
-            ['hard_run','Hard Run / Wednesday','⚡'],
-            ['parkrun','Parkrun (Saturday)','🏅'],
-            ['lsd','LSD / Sunday Long Run','🌄'],
-            ['kb_plyo','KB &amp; Plyometrics','💥'],
-            ['gym','Gym Session','🔩'],
-            ['rest','Rest Day','😴']
+            ['am_calisthenics', 'Calisthenics (Tue/Sun)', '🏋️'],
+            ['kb_plyo',         'KB / Plyometrics (Thu/Fri)', '💪'],
+            ['hard_run',        'Run (Wed)', '🏃'],
+            ['parkrun',         'Parkrun (Sat)', '🏅'],
+            ['lsd',             'LSD / Long Run (Sun)', '🌄'],
+            ['pm_easy_run',     'PM Easy Run', '🌙'],
+            ['gym',             'Gym (Fri Month 5–6)', '🔩'],
+            ['rest',            'Rest Day', '😴'],
           ].map(([val, label, icon]) => `
-            <label style="display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;transition:border-color 0.15s" class="session-checkbox-label">
+            <label style="display:flex;align-items:center;gap:8px;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;transition:border-color 0.15s" class="session-checkbox-label">
               <input type="checkbox" class="dl-session-cb" value="${val}" style="accent-color:var(--accent);width:16px;height:16px" ${prefill && getPrefillSessions(prefill.dayKey).includes(val) ? 'checked' : ''} />
               <span style="font-size:13px">${icon} ${label}</span>
             </label>`).join('')}
@@ -3164,21 +3200,22 @@ function renderDailyLog() {
   el.querySelectorAll('.dl-session-cb').forEach(cb => {
     cb.addEventListener('change', () => {
       const pmChecked = [...el.querySelectorAll('.dl-session-cb:checked')]
-        .some(c => ['pm_easy_run','parkrun','lsd','hard_run'].includes(c.value));
+        .some(c => ['pm_easy_run','parkrun','lsd','hard_run','kb_plyo','gym'].includes(c.value));
       document.getElementById('dl-pm-energy-wrap').style.display = pmChecked ? '' : 'none';
     });
   });
 }
 
 function getPrefillSessions(dayKey) {
+  // Map each plan day to the session checkbox values that apply
   const map = {
-    tuesday:   ['am_calisthenics','pm_easy_run'],
+    monday:    ['rest'],
+    tuesday:   ['am_calisthenics'],
     wednesday: ['hard_run'],
-    thursday:  ['kb_plyo','pm_easy_run'],
-    friday:    ['am_calisthenics'],
+    thursday:  ['kb_plyo'],        // PM run optional — user ticks if done
+    friday:    ['am_calisthenics'], // KB Fundamentals / Gym — both use am_calisthenics
     saturday:  ['parkrun'],
     sunday:    ['lsd'],
-    monday:    ['rest']
   };
   return map[dayKey] || [];
 }
@@ -3186,7 +3223,7 @@ function getPrefillSessions(dayKey) {
 function saveDailyLog(e) {
   e.preventDefault();
   const sessions = [...document.querySelectorAll('.dl-session-cb:checked')].map(c => c.value);
-  const hasPM    = sessions.some(s => ['pm_easy_run','parkrun','lsd','hard_run'].includes(s));
+  const hasPM    = sessions.some(s => ['pm_easy_run','parkrun','lsd','hard_run','kb_plyo','gym'].includes(s));
 
   const entry = {
     id:        Date.now(),
