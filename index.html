@@ -1447,6 +1447,13 @@ const PLAN_DATA = {
           ]
         }
       },
+      milestones: [
+        { id: 'm1_incline',  text: 'Incline Push-Up — 3 × 10, no elbow flare, full range every rep' },
+        { id: 'm1_inv_row',  text: 'Inverted Row — 3 × 8, chest touches bar on every single rep' },
+        { id: 'm1_chin_neg', text: 'Chin-Up Negative — 4 × 4, full 5s controlled descent' },
+        { id: 'm1_kb_swing', text: 'KB Swing — 3 × 10 with 12kg, consistent hip snap (not arm lift)' },
+        { id: 'm1_attend',   text: '4 consecutive weeks completed — no sessions skipped' },
+      ],
       runningPlan: {
         note: "All runs Zone 2 — conversational pace. Target ~6:30–7:30 min/km. Track time, not pace. Walk whenever needed on parkrun.",
         weeklyVolume: "~12–14km/week",
@@ -1515,6 +1522,13 @@ const PLAN_DATA = {
           ]
         }
       },
+      milestones: [
+        { id: 'm2_pushup',   text: 'Floor Push-Up — 4 × 10, chest to floor, no elbow flare' },
+        { id: 'm2_pullup',   text: 'Pull-Up — 2–3 full dead-hang reps OR 4 × 5 band-assisted, full range' },
+        { id: 'm2_kb_swing', text: 'KB Swing — 4 × 15 with 16kg, consistent hip snap' },
+        { id: 'm2_kb_clean', text: 'KB Clean — 3 × 6/arm with 12kg, smooth rack, no wrist flop' },
+        { id: 'm2_thu_pm',   text: 'Thursday PM Run — 20 min easy jog without stopping' },
+      ],
       runningPlan: {
         note: "Parkrun moves to race effort from Week 2. Wednesday stays Zone 2. Thursday PM is Zone 1 only — flush session. If legs are sore, walk the whole thing.",
         weeklyVolume: "~15–18km/week",
@@ -1579,6 +1593,13 @@ const PLAN_DATA = {
           exercises: []
         }
       },
+      milestones: [
+        { id: 'm3_dip',      text: 'Dip — 4 × 8, full depth (shoulder below elbow) every rep' },
+        { id: 'm3_pullup',   text: 'Pull-Up — 5 strict dead-hang reps' },
+        { id: 'm3_kb_press', text: 'KB Clean + Press — 4 × 5/arm with 16kg, smooth rack + overhead lockout' },
+        { id: 'm3_kb_swing', text: 'One-Arm KB Swing — 4 × 12/arm with 16kg' },
+        { id: 'm3_lsd',      text: 'Sunday LSD — 7km easy without stopping' },
+      ],
       runningPlan: {
         note: "Wednesday adds strides. Sunday LSD returns. Thursday PM extends. Strides: 100m at 80% effort — not sprints. 60–90s walk recovery between each.",
         weeklyVolume: "~22–28km/week",
@@ -1648,6 +1669,13 @@ const PLAN_DATA = {
           exercises: []
         }
       },
+      milestones: [
+        { id: 'm4_w_dip',   text: 'Weighted Dip — 4 × 6 with +10kg, full depth every rep' },
+        { id: 'm4_pullup',  text: 'Pull-Up — 8 strict unweighted OR 4 × 5 with +5kg' },
+        { id: 'm4_mu_neg',  text: 'Muscle-Up Negative — 3 × 3, smooth controlled descent through transition' },
+        { id: 'm4_pistol',  text: 'Assisted Pistol Squat — 3 × 6/leg consistently, hip crease below knee' },
+        { id: 'm4_plyo',    text: 'Plyometrics — box jump + broad jump landing quiet and controlled (soft knees)' },
+      ],
       runningPlan: {
         note: "Wednesday introduces tempo. *Thursday PM conditional — check recovery load table. Tempo pace: 5:00–5:30 min/km.",
         weeklyVolume: "~32–38km/week",
@@ -1715,6 +1743,13 @@ const PLAN_DATA = {
           exercises: []
         }
       },
+      milestones: [
+        { id: 'm5_mu',      text: 'Bar Muscle-Up — 3 consecutive reps, full lockout at top' },
+        { id: 'm5_wpullup', text: 'Weighted Pull-Up — 5 reps with +10kg, strict dead-hang start' },
+        { id: 'm5_hs',      text: 'Handstand Hold (wall) — 30s consistently, straight body' },
+        { id: 'm5_pistol',  text: 'Pistol Squat — freestanding or 1 finger support, 5 reps/leg' },
+        { id: 'm5_hiit',    text: 'HIIT Skipping — complete Session B pyramid without stopping' },
+      ],
       runningPlan: {
         note: "Wednesday tempo grows. Thursday PM conditional on Wednesday distance. Sunday LSD hits 14km. *Check recovery load table before Thursday PM.",
         weeklyVolume: "~40–48km/week",
@@ -1780,6 +1815,13 @@ const PLAN_DATA = {
           exercises: []
         }
       },
+      milestones: [
+        { id: 'm6_mu',      text: '3–5 consecutive Bar Muscle-Ups — full lockout, no kipping' },
+        { id: 'm6_pullup',  text: '8–10 strict Pull-Ups, or 4–5 reps with +10kg weighted' },
+        { id: 'm6_hspu',    text: 'Handstand Push-Up (wall) — 4–6 reps, head to floor, full lockout' },
+        { id: 'm6_pistol',  text: 'Freestanding Pistol Squat — 5 reps/leg, no support' },
+        { id: 'm6_parkrun', text: 'Parkrun sub-25 min' },
+      ],
       runningPlan: {
         note: "Tempo climbs to 10–12km. Sunday LSD hits 16km. *Thursday PM conditional — check table below. Deload Week 24: drop Tuesday and Thursday PM runs.",
         weeklyVolume: "~45–53km/week",
@@ -1866,6 +1908,7 @@ const KEYS = {
   goals:       'ft_goals',
   photosWeekly:'ft_photos_weekly',
   photosMonthly:'ft_photos_monthly',
+  milestones:  'ft_milestones',
   lastExport:  'ft_last_export'
 };
 
@@ -1884,6 +1927,13 @@ function getDailyLogs() { return storageGet(KEYS.daily) || []; }
 function getWeeklyCheckins() { return storageGet(KEYS.weekly) || []; }
 function getMonthlyAssessments() { return storageGet(KEYS.monthly) || []; }
 function getGoals() { return storageGet(KEYS.goals) || { yearGoal: '', monthlyGoals: [] }; }
+function getMilestones() { return new Set(storageGet(KEYS.milestones) || []); }
+function toggleMilestone(id) {
+  const done = getMilestones();
+  done.has(id) ? done.delete(id) : done.add(id);
+  storageSet(KEYS.milestones, [...done]);
+  renderTodayPlan(); // re-render to reflect change
+}
 
 
 /* =====================================================
@@ -2470,14 +2520,14 @@ function renderDashboard() {
     <!-- STAT CARDS -->
     <div class="section-heading">Performance Stats</div>
     <div class="stat-grid mb-20">
-      ${statCard('Bodyweight', statWeight, 'kg', weightDelta, p.baseline ? p.baseline.pushups : null)}
-      ${statCard('Parkrun 5km', parkrunStr, '', parkrunDelta, null, true)}
-      ${statCard('Push-Ups', statPushups, 'reps', delta(statPushups, latest([...monthly.slice(0,-1),...weekly.slice(0,-1)],'pushups')))}
-      ${statCard('Pull-Ups', statPullups, 'reps', delta(statPullups, latest([...monthly.slice(0,-1),...weekly.slice(0,-1)],'pullups')))}
-      ${statCard('Plank Hold', statPlank, 's', delta(statPlank, latest([...monthly.slice(0,-1),...weekly.slice(0,-1)],'plank')))}
-      ${statCard('Dead Hang', statDeadHang, 's', delta(statDeadHang, latest([...monthly.slice(0,-1),...weekly.slice(0,-1)],'deadHang')))}
-      ${statCard('Waist', statWaist, 'cm', delta(statWaist, latest([...monthly.slice(0,-1),...weekly.slice(0,-1)],'waist'), true))}
-      ${statCard('Weekly Volume', statVolume, 'km', delta(statVolume, prevWeekly ? prevWeekly.totalVolume : null))}
+      ${statCard('Bodyweight',   statWeight,   'kg',   weightDelta,   p.startingWeight || null, true)}
+      ${statCard('Parkrun 5km',  parkrunStr,   '',     parkrunDelta,  (b.parkrunMin*60 + b.parkrunSec) || null, true)}
+      ${statCard('Push-Ups',     statPushups,  'reps', delta(statPushups,  latest([...monthly.slice(0,-1),...weekly.slice(0,-1)],'pushups')),  b.pushups  || null)}
+      ${statCard('Pull-Ups',     statPullups,  'reps', delta(statPullups,  latest([...monthly.slice(0,-1),...weekly.slice(0,-1)],'pullups')),  b.pullups  || null)}
+      ${statCard('Plank Hold',   statPlank,    's',    delta(statPlank,    latest([...monthly.slice(0,-1),...weekly.slice(0,-1)],'plank')),    b.plank    || null)}
+      ${statCard('Dead Hang',    statDeadHang, 's',    delta(statDeadHang, latest([...monthly.slice(0,-1),...weekly.slice(0,-1)],'deadHang')), b.deadHang || null)}
+      ${statCard('Waist',        statWaist,    'cm',   delta(statWaist,    latest([...monthly.slice(0,-1),...weekly.slice(0,-1)],'waist'), true), p.waistCm || null, true)}
+      ${statCard('Weekly Volume',statVolume,   'km',   delta(statVolume,   prevWeekly ? prevWeekly.totalVolume : null))}
     </div>
 
     <!-- CHARTS -->
@@ -2498,14 +2548,30 @@ function renderDashboard() {
   requestAnimationFrame(() => buildDashboardCharts(weekly, monthly, daily));
 }
 
-function statCard(label, value, unit, deltaObj, _baseline, isTime = false) {
+function statCard(label, value, unit, deltaObj, baselineVal = null, isTime = false) {
   const displayVal = value !== null && value !== undefined ? value : '—';
   const d = deltaObj || { html: '', cls: 'delta-none' };
+
+  // Baseline delta — shows total improvement from starting point
+  let baselineHtml = '';
+  if (baselineVal !== null && baselineVal !== 0 && value !== null && value !== undefined) {
+    const raw  = isTime ? baselineVal - value : value - baselineVal;
+    const abs  = Math.abs(raw);
+    if (abs > 0) {
+      const good = isTime ? raw > 0 : raw > 0;
+      const arrow = raw > 0 ? '↑' : '↓';
+      const cls   = good ? 'delta-up' : 'delta-down';
+      const disp  = Number.isInteger(abs) ? abs : abs.toFixed(1);
+      baselineHtml = `<div class="stat-delta ${cls}" style="font-size:10px;margin-top:1px;opacity:0.75">${arrow}${disp} from baseline</div>`;
+    }
+  }
+
   return `
     <div class="stat-card">
       <div class="stat-card-label">${label}</div>
       <div class="stat-num">${displayVal}${unit ? `<span class="stat-unit">${unit}</span>` : ''}</div>
       ${d.html ? `<div class="stat-delta ${d.cls}">${d.html}</div>` : '<div class="stat-delta delta-none">No data yet</div>'}
+      ${baselineHtml}
     </div>`;
 }
 
@@ -2629,6 +2695,50 @@ function buildDashboardCharts(weekly, monthly, daily) {
 /* =====================================================
    TODAY'S PLAN — RENDER
 ===================================================== */
+/* ── Fix 7: Monthly milestone checklist ───────────────── */
+function renderMilestoneChecklist(phase) {
+  const milestones = phase.milestones;
+  if (!milestones || !milestones.length) return '';
+
+  const done      = getMilestones();
+  const doneCount = milestones.filter(m => done.has(m.id)).length;
+  const allDone   = doneCount === milestones.length;
+
+  const items = milestones.map(m => {
+    const checked = done.has(m.id);
+    return `
+      <div onclick="toggleMilestone('${m.id}')"
+           style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--border);cursor:pointer;-webkit-tap-highlight-color:transparent">
+        <div style="width:18px;height:18px;border-radius:50%;border:1.5px solid ${checked ? 'var(--accent)' : 'var(--border-strong)'};
+             background:${checked ? 'var(--accent)' : 'transparent'};flex-shrink:0;margin-top:1px;
+             display:flex;align-items:center;justify-content:center;transition:all 0.15s">
+          ${checked ? `<span style="color:#0A0A0A;font-size:10px;font-weight:700;line-height:1">✓</span>` : ''}
+        </div>
+        <span style="font-size:13px;color:${checked ? 'var(--muted)' : 'var(--text)'};
+              text-decoration:${checked ? 'line-through' : 'none'};
+              text-decoration-color:var(--border-strong);line-height:1.4">${m.text}</span>
+      </div>`;
+  }).join('');
+
+  return `
+    <div style="background:var(--surface);border:0.5px solid ${allDone ? 'var(--accent)' : 'var(--border)'};border-radius:12px;padding:14px 16px;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint)">
+          Phase Milestones — clear all before advancing
+        </div>
+        <div style="font-family:var(--font-mono);font-size:0.65rem;color:${allDone ? 'var(--accent)' : 'var(--muted)'}">
+          ${doneCount}/${milestones.length}
+        </div>
+      </div>
+      ${items.replace(/border-bottom:0\.5px solid var\(--border\)(?=.*<\/div>\s*$)/,'')}
+      ${allDone ? `
+        <div style="margin-top:10px;padding:8px 12px;background:var(--accent-dim);border-radius:8px;
+             font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.06em;color:var(--accent);text-align:center">
+          ✓ Ready to advance to Month ${(phase.months[0] || 0) + 1}
+        </div>` : ''}
+    </div>`;
+}
+
 /* ── Fix 4: Phase + week progress bar ─────────────────── */
 function renderPlanProgress(pos, hasStartDate) {
   const totalWeeks = 24; // 6 months × 4 weeks
@@ -2715,6 +2825,9 @@ function renderTodayPlan() {
 
     <!-- Fix 4: phase + week progress -->
     ${renderPlanProgress(pos, !noStartDate)}
+
+    <!-- Fix 7: milestone checklist -->
+    ${renderMilestoneChecklist(phase)}
 
     <!-- Fix 5: recovery alert (Thu/Fri only) -->
     ${renderRecoveryAlert(dayKey)}
