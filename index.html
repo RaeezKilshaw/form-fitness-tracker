@@ -2845,20 +2845,31 @@ function refAccordion(id, title, content) {
 
 function renderWarmup() {
   const w = PLAN_DATA.warmup;
-  return `<p class="text-sm text-muted mb-8">${w.duration}</p>
-    <ol style="margin-left:18px;color:var(--text);font-size:13px;line-height:2">
-      ${w.steps.map(s=>`<li>${s}</li>`).join('')}
-    </ol>
-    <p class="text-xs text-muted mt-8">${w.pmNote}</p>`;
+  return `<p class="text-xs text-muted mb-8">${w.title}</p>
+    <div class="ex-list">
+      ${w.exercises.map(ex => `
+        <div class="ex-row">
+          <div class="ex-main">
+            <span class="ex-name">${ex.no ? ex.no + '. ' : ''}${ex.name}</span>
+          </div>
+          <div class="ex-sub"><span class="ex-note">${ex.detail}</span></div>
+        </div>`).join('')}
+    </div>`;
 }
 
 function renderCooldown() {
   const c = PLAN_DATA.cooldown;
-  return `<p class="text-sm text-muted mb-8">${c.duration}</p>
-    <ol style="margin-left:18px;color:var(--text);font-size:13px;line-height:2">
-      ${c.steps.map(s=>`<li>${s}</li>`).join('')}
-    </ol>
-    <p class="text-xs text-muted mt-8">${c.pmNote}</p>`;
+  return `<p class="text-xs text-muted mb-8">${c.title}</p>
+    <div class="ex-list">
+      ${c.exercises.map(ex => `
+        <div class="ex-row">
+          <div class="ex-main">
+            <span class="ex-name">${ex.name}</span>
+            <span class="ex-chip">${ex.duration}</span>
+          </div>
+          ${ex.notes ? `<div class="ex-sub"><span class="ex-note">${ex.notes}</span></div>` : ''}
+        </div>`).join('')}
+    </div>`;
 }
 
 function renderRecoveryTable() {
@@ -2866,8 +2877,8 @@ function renderRecoveryTable() {
     <thead><tr><th>Signal</th><th>Action</th></tr></thead>
     <tbody>${PLAN_DATA.recoveryLoadTable.map(r=>`
       <tr>
-        <td><span class="badge badge-${r.level==='green'?'green':r.level==='red'?'red':'amber'}">${r.signal}</span></td>
-        <td>${r.action}</td>
+        <td style="font-size:13px">${r.signal}</td>
+        <td style="font-size:13px;color:var(--accent)">${r.action}</td>
       </tr>`).join('')}
     </tbody></table></div>
   <p class="text-xs text-muted mt-8">Deload weeks (every 4th week): Drop both Tuesday and Thursday PM runs.</p>`;
