@@ -1383,453 +1383,572 @@
 ===================================================== */
 const PLAN_DATA = {
   /* =====================================================
-     6-MONTH TRAINING PLAN
-     Calisthenics · Kettlebell · Running
-     Strength-First · 4 Gym Days/Week · Fat Loss + Lean Muscle
+     30-WEEK TRAINING PLAN
+     Calisthenics · Kettlebell · Running · Marathon-Ready
+     Start: 07 June 2026  ·  End: 03 January 2027
   ===================================================== */
   phases: [
 
-    /* ── MONTH 1: Habit & Foundation ─────────────────── */
+    /* ── CONDITIONING: Weeks 1–2 ──────────────────────── */
     {
-      id: 1, name: "Habit & Foundation", months: [1],
-      theme: "Show up. Don't get sore. Build the loop. Complete every session, every week, for 4 consecutive weeks. That is the win.",
-      rule: "You may NOT train harder than prescribed. Tendons adapt 3–4× slower than muscle. Overtraining Week 1 = injury Week 3.",
+      id: 0, name: "Conditioning", startWeek: 1, endWeek: 2, weekCount: 2,
+      theme: "Show up. Build the habit. Saturday 07 June 2026 is Day 1 — your first parkrun. Do not skip it.",
+      rule: "2 gym days only. Tendons adapt 4× slower than muscles. Week 1 overtraining = Week 3 injury.",
       weeklySchedule: {
-        monday:    { am: "Full REST — non-negotiable", pm: null, duration: null },
-        tuesday:   { am: "Calisthenics A — Push + Core", pm: null, duration: "45 min" },
-        wednesday: { am: "Easy Zone 2 Run", pm: null, duration: "20–25 min" },
-        thursday:  { am: "Calisthenics B — Pull + Hinge", pm: null, duration: "45 min" },
-        friday:    { am: "KB Fundamentals + Lower Body", pm: null, duration: "50 min" },
-        saturday:  { am: "Parkrun 5km — easy jog (no race effort)", pm: null, duration: "35 min" },
-        sunday:    { am: "Skill + Mobility Session", pm: null, duration: "40 min" },
+        monday:    { am: "Full REST", pm: null, duration: null },
+        tuesday:   { am: "Gym: Full-Body A — Push + Core", pm: null, duration: "45 min" },
+        wednesday: { am: "Easy Zone 2 Run", pm: null, duration: "20 min" },
+        thursday:  { am: "Gym: Full-Body B — Pull + Hinge", pm: null, duration: "45 min" },
+        friday:    { am: "REST", pm: null, duration: null },
+        saturday:  { am: "Parkrun 5km — easy jog, no racing", pm: null, duration: "35 min" },
+        sunday:    { am: "Easy jog or walk", pm: null, duration: "20 min" },
+      },
+      workouts: {
+        tuesday: {
+          title: "Full-Body A: Push + Core", warmup: "Universal protocol (8 min)",
+          exercises: [
+            { name: "Incline Push-Up (hands on bench)", sets: 3, reps: "8–10",   rest: "60s",  notes: "Chest touches bench, elbows at 45°, body straight" },
+            { name: "Parallel Bar Support Hold",         sets: 3, reps: "15–20s", rest: "60s",  notes: "Arms locked, shoulders down — dip foundation" },
+            { name: "Pike Push-Up",                      sets: 3, reps: "6–8",   rest: "75s",  notes: "Hips high, head through arms at bottom" },
+            { name: "Forearm Plank Hold",                sets: 3, reps: "20–30s", rest: "45s",  notes: "Neutral spine — stop the instant hips sag" },
+            { name: "Dead Bug",                          sets: 2, reps: "6/side", rest: "45s",  notes: "Lower back glued to floor throughout" },
+          ]
+        },
+        thursday: {
+          title: "Full-Body B: Pull + Hinge", warmup: "Universal protocol (8 min)",
+          exercises: [
+            { name: "Dead Hang",                    sets: 3, reps: "15–20s", rest: "60s",  notes: "Passive hang — grip and breathe, shoulders relaxed" },
+            { name: "Inverted Row (under bar)",     sets: 3, reps: "6–8",    rest: "75s",  notes: "Body straight, chest to bar, squeeze shoulder blades" },
+            { name: "Chin-Up Negative",             sets: 3, reps: "3–4",    rest: "90s",  notes: "Jump to top, lower in 4–5s — this builds your pull-up" },
+            { name: "Bodyweight Romanian Deadlift", sets: 3, reps: "10",     rest: "60s",  notes: "Hip hinge, flat back, feel hamstring stretch" },
+            { name: "Side Plank",                   sets: 2, reps: "20s/side",rest: "45s", notes: "Hips up, straight line head to feet" },
+            { name: "Calf Raises (both legs)",      sets: 3, reps: "15–20",  rest: "30s",  notes: "Full range — #1 injury prevention for running" },
+          ]
+        },
+      },
+      milestones: [
+        { id: 'c_week1',    text: 'Week 1 complete — all 4 sessions done (Tue gym, Wed run, Thu gym, Sat parkrun)' },
+        { id: 'c_week2',    text: 'Week 2 complete — same, no skipped sessions' },
+        { id: 'c_incline',  text: 'Incline push-up form — body straight, chest touches bench every rep' },
+        { id: 'c_negative', text: 'Chin-up negative — controlled 4s descent on all reps, no dropping' },
+      ],
+      runningPlan: {
+        note: "All runs Zone 2 — conversational pace, 6:00–7:30 min/km. Track time only, not pace.",
+        weeklyVolume: "~8–10km/week",
+        weeks: [
+          { label: "Week 1 (07 Jun)", satParkrun: "5km easy jog", sunLSD: "20 min walk/jog", tuePM: "—", wed: "20 min easy jog", thuPM: "—" },
+          { label: "Week 2 (14 Jun)", satParkrun: "5km easy jog", sunLSD: "20 min walk/jog", tuePM: "—", wed: "22 min easy jog", thuPM: "—" },
+        ]
+      }
+    },
+
+    /* ── PHASE 1: FOUNDATION — Weeks 3–6 ─────────────── */
+    {
+      id: 1, name: "Phase 1: Foundation", startWeek: 3, endWeek: 6, weekCount: 4,
+      theme: "Three gym days. Floor push-ups begin. First real pull-up attempts. KB fundamentals. Wednesday run gets structured.",
+      weeklySchedule: {
+        monday:    { am: "Full REST", pm: null, duration: null },
+        tuesday:   { am: "Gym: Calisthenics A — Push + Core", pm: null, duration: "50 min" },
+        wednesday: { am: "Zone 2 Run", pm: null, duration: "25–30 min" },
+        thursday:  { am: "Gym: Calisthenics B — Pull + Hinge", pm: null, duration: "50 min" },
+        friday:    { am: "Gym: KB Fundamentals + Lower Body", pm: null, duration: "50 min" },
+        saturday:  { am: "Parkrun 5km", pm: null, duration: "30–35 min" },
+        sunday:    { am: "Easy jog + light stretch", pm: null, duration: "25–30 min" },
       },
       workouts: {
         tuesday: {
           title: "Calisthenics A: Push + Core", warmup: "Universal protocol (8 min)",
           exercises: [
-            { name: "Incline Push-Up (hands on bench)", sets: 3, reps: "8–10",   rest: "60s",  notes: "Body straight, elbows at 45°, chest touches bench" },
-            { name: "Parallel Bar Support Hold",         sets: 3, reps: "15–20s", rest: "60s",  notes: "Arms locked out, shoulders depressed — building dip foundation" },
-            { name: "Pike Push-Up",                      sets: 3, reps: "6–8",   rest: "75s",  notes: "Hips high, head through arms at the bottom, full range" },
-            { name: "Plank Hold (forearm)",              sets: 3, reps: "20–30s", rest: "45s",  notes: "Neutral spine, no sagging hips — stop the instant form breaks" },
-            { name: "Dead Bug",                          sets: 2, reps: "6/side", rest: "45s",  notes: "Lower back glued to floor throughout. Slow and controlled." },
+            { name: "Floor Push-Up (strict)", sets: 4, reps: "6–10",   rest: "75s",  notes: "Build to 4×15 before advancing to Phase 2. If <6 clean reps, stay on incline." },
+            { name: "Parallel Bar Dip",       sets: 3, reps: "5–8",    rest: "90s",  notes: "Full depth — shoulder below elbow every rep. Assisted if needed." },
+            { name: "Pike Push-Up",           sets: 3, reps: "8–10",   rest: "75s",  notes: "Hips high — progressing toward handstand push-up" },
+            { name: "Diamond Push-Up",        sets: 2, reps: "6–8",    rest: "60s",  notes: "Hands form diamond, elbows track back" },
+            { name: "Plank Hold",             sets: 3, reps: "30–40s", rest: "45s",  notes: "Add 5s each week" },
           ]
         },
         thursday: {
           title: "Calisthenics B: Pull + Hinge", warmup: "Universal protocol (8 min)",
           exercises: [
-            { name: "Dead Hang (passive)",               sets: 3, reps: "15–20s", rest: "60s",  notes: "Grip the bar, relax shoulders — builds grip and shoulder joint health" },
-            { name: "Inverted Row",                      sets: 3, reps: "6–8",    rest: "75s",  notes: "Body straight, chest touches bar, squeeze shoulder blades at top" },
-            { name: "Chin-Up Negative",                  sets: 3, reps: "3–4",    rest: "90s",  notes: "Jump or step to top, lower yourself in 4–5s. This IS your pull-up training." },
-            { name: "Bodyweight Romanian Deadlift",      sets: 3, reps: "10",     rest: "60s",  notes: "Hinge at hip, flat back, feel hamstring stretch — not a squat" },
-            { name: "Side Plank",                        sets: 2, reps: "20s/side",rest: "45s", notes: "Hips up, straight line from head to feet" },
-            { name: "Calf Raises (both legs)",           sets: 3, reps: "15–20",  rest: "30s",  notes: "Full range — critical for running injury prevention" },
+            { name: "Pull-Up Attempt / Band-Assisted", sets: 4, reps: "3–6",    rest: "120s", notes: "Dead hang start. Full range. Use band only if needed." },
+            { name: "Inverted Row",                    sets: 3, reps: "10–12",  rest: "75s",  notes: "Feet elevated to increase difficulty as you get stronger" },
+            { name: "Chin-Up Negative (5s)",           sets: 3, reps: "4–5",    rest: "90s",  notes: "Even when you can do pull-ups — negatives build faster" },
+            { name: "KB Romanian Deadlift",            sets: 3, reps: "12",     rest: "60s",  notes: "8–12kg KB. Hip hinge, flat back." },
+            { name: "Dead Hang",                       sets: 3, reps: "25–35s", rest: "60s",  notes: "Active hang — shoulders pulled away from ears" },
+            { name: "Single-Leg Calf Raise (step)",    sets: 3, reps: "12/leg", rest: "45s",  notes: "Full range — progress from both-leg version" },
           ]
         },
         friday: {
           title: "KB Fundamentals + Lower Body", warmup: "Universal protocol (8 min). Starting weight: 12kg KB",
           exercises: [
-            { name: "KB Deadlift",              sets: 3, reps: "10",       rest: "75s", notes: "Hip hinge — not a squat. Flat back, push the floor away. 12kg start." },
-            { name: "Goblet Squat",             sets: 3, reps: "10",       rest: "75s", notes: "Full depth, 3s down, pause at bottom, KB held at chest" },
-            { name: "KB Halo",                  sets: 3, reps: "8/direction",rest: "60s",notes: "Controlled circles around head — shoulder mobility and stability" },
-            { name: "KB Swing (two-handed)",    sets: 3, reps: "10",       rest: "90s", notes: "Hip snap drives the bell — not arms. Hinge back, explode forward." },
-            { name: "Lateral Lunge",            sets: 3, reps: "8/side",   rest: "60s", notes: "Push hips back, keep front foot flat, adductor stretch at bottom" },
-            { name: "Single-Leg Glute Bridge",  sets: 3, reps: "10/side",  rest: "45s", notes: "Drive through heel, squeeze glute at top, hold 1s" },
+            { name: "KB Deadlift",            sets: 3, reps: "10",         rest: "75s", notes: "Hip hinge not squat. 12kg. Flat back." },
+            { name: "Goblet Squat",           sets: 3, reps: "10",         rest: "75s", notes: "Full depth, 3s down, pause at bottom" },
+            { name: "KB Halo",                sets: 3, reps: "8/direction", rest: "60s", notes: "Controlled circles — shoulder mobility" },
+            { name: "KB Swing (two-handed)",  sets: 4, reps: "12",         rest: "90s", notes: "Hip snap drives bell — not arms. 12kg." },
+            { name: "Lateral Lunge",          sets: 3, reps: "8/side",     rest: "60s", notes: "Push hips back, front foot flat" },
+            { name: "Single-Leg Glute Bridge",sets: 3, reps: "10/side",    rest: "45s", notes: "Drive heel, squeeze glute, hold 1s at top" },
           ]
         },
-        sunday: {
-          title: "Skill + Mobility", warmup: null,
-          note: "Not a hard session. Invest in next week's performance.",
-          exercises: [
-            { name: "Dead Hang → Active Hang",    sets: 3, reps: "20s",   rest: "60s", notes: "First 10s passive, last 10s engage scapula" },
-            { name: "Chin-Up Negative (slow)",    sets: 4, reps: "3",     rest: "90s", notes: "5–6s descent, full range — your pull-up is built here" },
-            { name: "Parallel Bar Support Hold",  sets: 3, reps: "20s",   rest: "60s", notes: "Progress from Tuesday — aim for slightly longer holds" },
-            { name: "L-Sit Tuck Hold",            sets: 3, reps: "5–8s",  rest: "60s", notes: "Knees tucked to chest first. Extend one leg when you can hold 10s." },
-          ]
-        }
       },
       milestones: [
-        { id: 'm1_incline',  text: 'Incline Push-Up — 3 × 10, no elbow flare, full range every rep' },
-        { id: 'm1_inv_row',  text: 'Inverted Row — 3 × 8, chest touches bar on every single rep' },
-        { id: 'm1_chin_neg', text: 'Chin-Up Negative — 4 × 4, full 5s controlled descent' },
-        { id: 'm1_kb_swing', text: 'KB Swing — 3 × 10 with 12kg, consistent hip snap (not arm lift)' },
-        { id: 'm1_attend',   text: '4 consecutive weeks completed — no sessions skipped' },
+        { id: 'p1_pushup', text: 'Floor Push-Up — 4×10, chest to floor, no elbow flare' },
+        { id: 'p1_pullup', text: 'Pull-Up — 2–3 strict dead-hang reps OR 4×5 band-assisted full range' },
+        { id: 'p1_swing',  text: 'KB Swing — 4×12 with 16kg, consistent hip snap' },
+        { id: 'p1_attend', text: '4 consecutive weeks completed — no sessions skipped' },
       ],
       runningPlan: {
-        note: "All runs Zone 2 — conversational pace. Target ~6:30–7:30 min/km. Track time, not pace. Walk whenever needed on parkrun.",
-        weeklyVolume: "~12–14km/week",
+        note: "Zone 2 throughout. Parkrun race effort from Week 4. Week 6 is deload — reduce all distances ~30%.",
+        weeklyVolume: "~14–18km/week",
         weeks: [
-          { label: "Week 1",          satParkrun: "5km easy jog", sunLSD: "—", tuePM: "—", wed: "20 min easy", thuPM: "—" },
-          { label: "Week 2",          satParkrun: "5km easy jog", sunLSD: "—", tuePM: "—", wed: "22 min easy", thuPM: "—" },
-          { label: "Week 3",          satParkrun: "5km easy jog", sunLSD: "—", tuePM: "—", wed: "25 min easy", thuPM: "—" },
-          { label: "Week 4 (Deload)", satParkrun: "5km easy jog", sunLSD: "—", tuePM: "—", wed: "20 min easy", thuPM: "—", deload: true },
+          { label: "Week 3 (21 Jun)",           satParkrun: "5km easy",        sunLSD: "25 min easy", tuePM: "—", wed: "25 min Z2", thuPM: "—" },
+          { label: "Week 4 (28 Jun)",           satParkrun: "5km race effort", sunLSD: "25 min easy", tuePM: "—", wed: "27 min Z2", thuPM: "—" },
+          { label: "Week 5 (05 Jul)",           satParkrun: "5km race effort", sunLSD: "28 min easy", tuePM: "—", wed: "30 min Z2", thuPM: "—" },
+          { label: "Week 6 (12 Jul) — Deload",  satParkrun: "5km easy",        sunLSD: "20 min easy", tuePM: "—", wed: "20 min Z2", thuPM: "—", deload: true },
         ]
       }
     },
 
-    /* ── MONTH 2: Base Building ───────────────────────── */
+    /* ── PHASE 2: BASE BUILD — Weeks 7–10 ─────────────── */
     {
-      id: 2, name: "Base Building", months: [2],
-      theme: "Floor push-ups. First pull-up attempts. KB volume climbs. Thursday PM run introduced.",
+      id: 2, name: "Phase 2: Base Build", startWeek: 7, endWeek: 10, weekCount: 4,
+      theme: "Pull-up volume climbs. Dips in earnest. KB clean introduced. Sunday becomes structured mobility. Thursday PM run added. LSD begins.",
       weeklySchedule: {
         monday:    { am: "Full REST", pm: null, duration: null },
-        tuesday:   { am: "Calisthenics A — Push Focus", pm: null, duration: "50 min" },
-        wednesday: { am: "Easy Zone 2 Run", pm: null, duration: "25–30 min" },
-        thursday:  { am: "Calisthenics B — Pull + Hinge", pm: "Easy jog 15–20 min (Zone 1)", duration: "AM 45 / PM 20 min" },
-        friday:    { am: "KB Strength + Lower Body", pm: null, duration: "55 min" },
-        saturday:  { am: "Parkrun 5km — race effort from Week 2", pm: null, duration: "30–35 min" },
-        sunday:    { am: "Skill + Mobility", pm: null, duration: "40 min" },
+        tuesday:   { am: "Gym: Push Focus", pm: null, duration: "55 min" },
+        wednesday: { am: "Zone 2 Run + strides", pm: null, duration: "35 min" },
+        thursday:  { am: "Gym: Pull Strength", pm: "Easy jog 20–25 min (Zone 1)*", duration: "AM 55 / PM 25 min" },
+        friday:    { am: "Gym: KB Power + Lower Body", pm: null, duration: "55 min" },
+        saturday:  { am: "Parkrun 5km — race effort", pm: null, duration: "30–35 min" },
+        sunday:    { am: "LSD Run + Mobility Session", pm: null, duration: "60–70 min" },
       },
       workouts: {
         tuesday: {
-          title: "Calisthenics A: Push Focus", warmup: "Universal protocol + 2 × 10 scapular push-ups",
+          title: "Push Focus", warmup: "Universal protocol (8 min) + 2×10 scapular push-ups",
           exercises: [
-            { name: "Floor Push-Up (strict)",              sets: 4, reps: "6–10",  rest: "75s", notes: "Chest to floor, elbows at 45°, body plank-straight throughout" },
-            { name: "Parallel Bar Dip (assisted if needed)",sets: 3, reps: "5–8",  rest: "90s", notes: "Upright torso, full depth — shoulder below elbow at bottom" },
-            { name: "Pike Push-Up",                        sets: 3, reps: "8–10",  rest: "75s", notes: "Progress from Month 1 — aim for more reps at same quality" },
-            { name: "Diamond Push-Up",                     sets: 2, reps: "6–8",   rest: "60s", notes: "Hands form a diamond, elbows track back along ribcage" },
-            { name: "Plank Hold",                          sets: 3, reps: "30–40s",rest: "45s", notes: "Progress from Month 1 — add 10s per week" },
+            { name: "Floor Push-Up (strict)",       sets: 4, reps: "10–12",  rest: "75s",  notes: "Progress toward 4×15 before advancing" },
+            { name: "Parallel Bar Dip",             sets: 4, reps: "6–10",   rest: "90s",  notes: "Full depth — shoulder below elbow. Upright torso." },
+            { name: "Pike Push-Up (feet elevated)",  sets: 3, reps: "8–10",   rest: "90s",  notes: "Feet on bench — toward handstand push-up position" },
+            { name: "Archer Push-Up (intro)",        sets: 3, reps: "5/side", rest: "90s",  notes: "Widen one hand, lean and press. Learn the pattern." },
+            { name: "Plank to Push-Up",              sets: 3, reps: "8",      rest: "60s",  notes: "Controlled — no hip rotation" },
           ]
         },
         thursday: {
-          title: "Calisthenics B: Pull + Hinge", warmup: "Universal protocol (8 min)",
+          title: "Pull Strength", warmup: "Universal protocol (8 min)",
           exercises: [
-            { name: "Pull-Up / Band-Assisted Pull-Up",  sets: 4, reps: "3–6",   rest: "120s", notes: "Dead hang start, chin over bar. Full range matters more than reps." },
-            { name: "Inverted Row (feet elevated)",      sets: 3, reps: "10–12", rest: "75s",  notes: "Increase angle — feet elevated if body row is too easy" },
-            { name: "Chin-Up Negative (5s down)",        sets: 3, reps: "4–5",   rest: "90s",  notes: "Even if you can do pull-ups now — negatives build strength faster" },
-            { name: "Bodyweight Romanian Deadlift",      sets: 3, reps: "12",    rest: "60s",  notes: "Add light KB (8–12kg) if bodyweight feels too easy" },
-            { name: "Dead Hang",                         sets: 3, reps: "25–35s",rest: "60s",  notes: "Active hang — shoulder blades pulled down and back" },
-            { name: "Calf Raises (single-leg)",          sets: 3, reps: "12/leg",rest: "45s",  notes: "Off a step, full range — progress from both-leg version" },
+            { name: "Pull-Up (strict)",             sets: 5, reps: "3–6",    rest: "120s", notes: "Dead hang start. Chase full range every rep." },
+            { name: "Weighted Pull-Up (+2.5–5kg)",  sets: 3, reps: "3–4",    rest: "120s", notes: "Only if 5+ clean pull-ups. Belt or vest." },
+            { name: "Inverted Row (feet elevated)", sets: 3, reps: "10–12",  rest: "75s",  notes: "Raise feet to increase difficulty" },
+            { name: "Face Pull (resistance band)",  sets: 3, reps: "15",     rest: "60s",  notes: "Retract scapula + external rotation — shoulder health" },
+            { name: "Dead Hang",                    sets: 3, reps: "35–45s", rest: "60s",  notes: "Grip endurance — future muscle-up foundation" },
+            { name: "Toes-to-Bar",                  sets: 3, reps: "4–6",    rest: "75s",  notes: "Hang, legs straight, toes to bar — core + lat" },
           ]
         },
         friday: {
-          title: "KB Strength + Lower Body", warmup: "Universal protocol. KB weight: 12–16kg depending on exercise",
+          title: "KB Power + Lower Body", warmup: "Universal protocol (8 min). 16kg KB target",
           exercises: [
-            { name: "KB Deadlift",               sets: 3, reps: "12",    rest: "75s", notes: "Add weight if 3 × 12 feels easy — maintain flat back" },
-            { name: "Goblet Squat",              sets: 4, reps: "10",    rest: "75s", notes: "3s eccentric, pause at bottom, drive through heels" },
-            { name: "KB Swing (two-handed)",     sets: 4, reps: "15",    rest: "90s", notes: "Progress from 3 × 10. Hip snap — not squat. Control the descent." },
-            { name: "KB Clean (one-handed)",     sets: 3, reps: "6/arm", rest: "90s", notes: "New movement — pull elbow high, let bell rotate into rack. 12kg max." },
-            { name: "Bulgarian Split Squat (BW)",sets: 3, reps: "8/leg", rest: "90s", notes: "Rear foot elevated on bench. 3s down. Control the depth." },
-            { name: "Single-Leg Calf Raise",     sets: 3, reps: "12/leg",rest: "45s", notes: "Off a step, full range — eccentric focus" },
+            { name: "KB Swing (one-handed)",          sets: 4, reps: "12/arm", rest: "90s", notes: "Progress from two-handed. Same hip snap." },
+            { name: "KB Clean (one-handed)",           sets: 3, reps: "6/arm",  rest: "90s", notes: "Pull elbow high, let bell rotate to rack. 12kg start." },
+            { name: "Goblet Squat",                    sets: 4, reps: "10",     rest: "75s", notes: "3s down, pause, drive through heels" },
+            { name: "KB Single-Leg RDL",               sets: 3, reps: "8/leg",  rest: "90s", notes: "Balance + posterior chain. 12kg." },
+            { name: "Nordic Hamstring Curl",           sets: 3, reps: "5–6",    rest: "90s", notes: "Feet hooked under bench. Eccentric focus. DOMS first 2 weeks — normal." },
+            { name: "Single-Leg Calf Raise + pause",   sets: 3, reps: "15/leg", rest: "45s", notes: "2s pause at bottom — Achilles health" },
           ]
         },
         sunday: {
-          title: "Skill + Mobility", warmup: null,
+          title: "LSD + Mobility (35 min mobility after run)", warmup: null,
           exercises: [
-            { name: "Pull-Up Attempt (full)", sets: 4, reps: "max",    rest: "120s", notes: "Dead hang, chin over bar. Count every clean rep. Record weekly." },
-            { name: "Active Hang",            sets: 3, reps: "30s",    rest: "60s",  notes: "Scapula engaged — shoulders pulled away from ears" },
-            { name: "L-Sit Tuck Hold",        sets: 3, reps: "8–12s",  rest: "60s",  notes: "Progress from Month 1 — try extending one leg" },
-            { name: "Bar Dip (full)",         sets: 3, reps: "4–6",    rest: "90s",  notes: "If you have the strength — full depth, full lockout" },
+            { name: "Foam roll: quads, IT band, thoracic", sets: 1, reps: "2 min each", rest: "—", notes: "Pause on tender spots" },
+            { name: "Hip flexor kneeling stretch",          sets: 1, reps: "2 min/side", rest: "—", notes: "Posterior tilt at bottom" },
+            { name: "Seated hamstring + dorsiflexion",      sets: 1, reps: "2 min/side", rest: "—", notes: "Flex foot — calf and hamstring together" },
+            { name: "Thoracic rotation (ground)",           sets: 1, reps: "10/side",    rest: "—", notes: "Hips stacked — rotate from mid-back" },
+            { name: "Deep squat hold + rocks",              sets: 1, reps: "2 min",      rest: "—", notes: "Breathe into tight spots" },
+            { name: "Shoulder cross-body + doorway",        sets: 1, reps: "2 min each", rest: "—", notes: "Posterior capsule + pec minor" },
+            { name: "Box breathing",                        sets: 1, reps: "5 min",      rest: "—", notes: "4s in · 4s hold · 4s out · 4s hold" },
           ]
-        }
+        },
       },
       milestones: [
-        { id: 'm2_pushup',   text: 'Floor Push-Up — 4 × 10, chest to floor, no elbow flare' },
-        { id: 'm2_pullup',   text: 'Pull-Up — 2–3 full dead-hang reps OR 4 × 5 band-assisted, full range' },
-        { id: 'm2_kb_swing', text: 'KB Swing — 4 × 15 with 16kg, consistent hip snap' },
-        { id: 'm2_kb_clean', text: 'KB Clean — 3 × 6/arm with 12kg, smooth rack, no wrist flop' },
-        { id: 'm2_thu_pm',   text: 'Thursday PM Run — 20 min easy jog without stopping' },
+        { id: 'p2_dip',    text: 'Dip — 4×8 full depth, shoulder below elbow every rep' },
+        { id: 'p2_pullup', text: 'Pull-Up — 5 strict dead-hang reps' },
+        { id: 'p2_clean',  text: 'KB Clean — 3×6/arm with 16kg, smooth rack, no wrist flop' },
+        { id: 'p2_lsd',    text: 'Sunday LSD — 7km easy without stopping' },
       ],
       runningPlan: {
-        note: "Parkrun moves to race effort from Week 2. Wednesday stays Zone 2. Thursday PM is Zone 1 only — flush session. If legs are sore, walk the whole thing.",
-        weeklyVolume: "~15–18km/week",
+        note: "Strides: 100m at 80% effort, 60–90s walk recovery. Thu PM Zone 1 only. Week 10 deload.",
+        weeklyVolume: "~20–26km/week",
         weeks: [
-          { label: "Week 5",          satParkrun: "5km easy",        sunLSD: "—", tuePM: "—", wed: "25 min Z2", thuPM: "15 min jog" },
-          { label: "Week 6",          satParkrun: "5km race effort", sunLSD: "—", tuePM: "—", wed: "27 min Z2", thuPM: "17 min jog" },
-          { label: "Week 7",          satParkrun: "5km race effort", sunLSD: "—", tuePM: "—", wed: "30 min Z2", thuPM: "20 min jog" },
-          { label: "Week 8 (Deload)", satParkrun: "5km easy",        sunLSD: "—", tuePM: "—", wed: "20 min Z2", thuPM: "—", deload: true },
+          { label: "Week 7 (19 Jul)",            satParkrun: "5km race", sunLSD: "5km easy", tuePM: "—", wed: "30 min + 4 strides", thuPM: "20 min Z1*" },
+          { label: "Week 8 (26 Jul)",            satParkrun: "5km race", sunLSD: "6km easy", tuePM: "—", wed: "32 min + 4 strides", thuPM: "22 min Z1*" },
+          { label: "Week 9 (02 Aug)",            satParkrun: "5km race", sunLSD: "7km easy", tuePM: "—", wed: "35 min + 4 strides", thuPM: "25 min Z1*" },
+          { label: "Week 10 (09 Aug) — Deload",  satParkrun: "5km easy", sunLSD: "5km easy", tuePM: "—", wed: "25 min easy",        thuPM: "REST", deload: true },
         ]
       }
     },
 
-    /* ── MONTH 3: Foundations Locked ─────────────────── */
+    /* ── PHASE 3: STRENGTH FOUNDATIONS — Weeks 11–14 ──── */
     {
-      id: 3, name: "Foundations Locked", months: [3],
-      theme: "Dips begin in earnest. Pull-ups increase. KB press introduced. Wednesday running picks up. Sunday LSD returns.",
+      id: 3, name: "Phase 3: Strength Foundations", startWeek: 11, endWeek: 14, weekCount: 4,
+      theme: "Weighted pull-ups and dips. KB press overhead. Archer push-ups primary. Wednesday adds Zone 3. Sunday active skills session.",
       weeklySchedule: {
         monday:    { am: "Full REST + light stretching", pm: null, duration: "20 min optional" },
-        tuesday:   { am: "Calisthenics A — Push + Dip Focus", pm: null, duration: "55 min" },
-        wednesday: { am: "Zone 2 Run + strides", pm: null, duration: "35–40 min" },
-        thursday:  { am: "Calisthenics B — Pull Strength", pm: "Easy jog 20–25 min (Zone 1–2)", duration: "AM 50 / PM 25 min" },
-        friday:    { am: "KB Power + Lower Body", pm: null, duration: "55 min" },
-        saturday:  { am: "Parkrun 5km (race effort)", pm: null, duration: "30–35 min" },
-        sunday:    { am: "LSD Run + Mobility", pm: null, duration: "50–60 min" },
+        tuesday:   { am: "Gym: Push + Dip Focus", pm: null, duration: "55 min" },
+        wednesday: { am: "Run — Zone 2 + Zone 3 intro", pm: null, duration: "40 min" },
+        thursday:  { am: "Gym: Pull Strength", pm: "Easy jog 20–25 min*", duration: "AM 55 / PM 25 min" },
+        friday:    { am: "Gym: KB Press + Lower Body", pm: null, duration: "55 min" },
+        saturday:  { am: "Parkrun 5km — race effort", pm: null, duration: "30–35 min" },
+        sunday:    { am: "LSD + Skill Practice + Mobility", pm: null, duration: "70–80 min" },
       },
       workouts: {
         tuesday: {
-          title: "Calisthenics A: Push + Dip Focus", warmup: "Universal protocol + 2 × 10 scapular push-ups",
+          title: "Push + Dip Focus", warmup: "Universal protocol (8 min) + 2×10 scapular push-ups",
           exercises: [
-            { name: "Floor Push-Up (strict)",      sets: 4, reps: "10–15",  rest: "75s", notes: "Progress to weighted push-up (plate on back) when 4 × 15 is easy" },
-            { name: "Parallel Bar Dip",            sets: 4, reps: "6–10",   rest: "90s", notes: "Full depth — shoulder below elbow. Upright torso for chest focus." },
-            { name: "Pike Push-Up (elevated feet)",sets: 3, reps: "8–10",   rest: "90s", notes: "Feet on bench — closer to handstand push-up position" },
-            { name: "Archer Push-Up (intro)",      sets: 3, reps: "5/side", rest: "90s", notes: "Widen one hand, lean and press — unilateral chest strength" },
-            { name: "Plank to Push-Up",            sets: 3, reps: "8",      rest: "60s", notes: "Controlled transition — no hip rotation" },
+            { name: "Archer Push-Up",                   sets: 4, reps: "6/side",  rest: "90s",  notes: "Primary movement. 3s down. No hip rotation." },
+            { name: "Weighted Push-Up (+5–10kg plate)",  sets: 3, reps: "8–10",   rest: "90s",  notes: "Plate on back. Body plank-straight." },
+            { name: "Parallel Bar Dip (weighted +5kg)",  sets: 4, reps: "6–8",    rest: "90s",  notes: "Full depth non-negotiable. Add weight only if 4×10 BW easy." },
+            { name: "Pike Push-Up (feet elevated)",      sets: 3, reps: "8–10",   rest: "90s",  notes: "Progressing toward HSPU" },
+            { name: "Planche Lean (wall)",               sets: 3, reps: "15–20s", rest: "60s",  notes: "Forward lean on straight arms — shoulder protraction" },
           ]
         },
         thursday: {
-          title: "Calisthenics B: Pull Strength", warmup: "Universal protocol (8 min)",
+          title: "Pull Strength", warmup: "Universal protocol (8 min)",
           exercises: [
-            { name: "Pull-Up (strict, dead hang)",       sets: 5, reps: "3–6",   rest: "120s", notes: "Add band only if needed. Chase full range on every rep." },
-            { name: "Weighted Pull-Up (+2.5–5kg)",       sets: 3, reps: "3–4",   rest: "120s", notes: "Only if you can do 5+ clean pull-ups. Belt or vest." },
-            { name: "Inverted Row (feet elevated)",       sets: 3, reps: "10–12", rest: "75s",  notes: "Increase difficulty by raising feet higher" },
-            { name: "Face Pull (resistance band)",        sets: 3, reps: "15",    rest: "60s",  notes: "Retract scapula + external rotation — shoulder health" },
-            { name: "Dead Hang",                          sets: 3, reps: "35–45s",rest: "60s",  notes: "Grip endurance — future muscle-up foundation" },
-            { name: "Toes-to-Bar (intro)",               sets: 3, reps: "4–6",   rest: "75s",  notes: "Hang, legs straight, raise toes to bar — core + lat integration" },
+            { name: "Weighted Pull-Up (+5kg)",   sets: 5, reps: "4–6",    rest: "150s", notes: "Slow 3s eccentric. Dead hang between reps." },
+            { name: "Explosive Pull-Up",         sets: 3, reps: "4–5",    rest: "120s", notes: "Pull chest to bar — not just chin. Explosive concentric." },
+            { name: "Bar Muscle-Up Negative",    sets: 3, reps: "3",      rest: "120s", notes: "Jump above bar, slow lower through transition — learn the pattern" },
+            { name: "Inverted Row (feet high)",  sets: 3, reps: "10",     rest: "75s",  notes: "Chest to bar, controlled" },
+            { name: "Dead Hang",                 sets: 3, reps: "40–50s", rest: "60s",  notes: "Grip endurance" },
+            { name: "Toes-to-Bar",               sets: 3, reps: "6–8",    rest: "75s",  notes: "No swinging — dead stop between reps" },
           ]
         },
         friday: {
-          title: "KB Power + Lower Body", warmup: "Universal protocol. KB weight: 16kg for most movements",
+          title: "KB Clean + Press + Lower Body", warmup: "Universal protocol (8 min). 16kg KB",
           exercises: [
-            { name: "KB Swing (one-handed)",             sets: 4, reps: "12/arm", rest: "90s", notes: "Progress from two-handed. Same hip snap. Control on descent." },
-            { name: "KB Clean + Press",                  sets: 4, reps: "5/arm",  rest: "90s", notes: "Clean to rack, press overhead, lower with control. 12–16kg." },
-            { name: "Goblet Squat",                      sets: 3, reps: "12",     rest: "75s", notes: "Heels elevated slightly if ankle mobility is limiting depth" },
-            { name: "KB Romanian Deadlift (single-leg)", sets: 3, reps: "8/leg",  rest: "90s", notes: "Balance + posterior chain. Light KB to start — 12kg." },
-            { name: "Nordic Hamstring Curl (assisted)",  sets: 3, reps: "5–6",    rest: "90s", notes: "Feet hooked under bench. Eccentric focus. Will cause DOMS first 2 weeks — normal." },
-            { name: "Single-Leg Calf Raise + Pause",     sets: 3, reps: "15/leg", rest: "45s", notes: "2s pause at bottom — Achilles tendon health" },
+            { name: "KB Clean + Press (one arm)",   sets: 4, reps: "5/arm",  rest: "90s", notes: "Smooth clean to rack, press overhead, lower with control" },
+            { name: "KB Swing (one-handed)",        sets: 4, reps: "15/arm", rest: "90s", notes: "Power and hip endurance" },
+            { name: "Bulgarian Split Squat",        sets: 3, reps: "8/leg",  rest: "90s", notes: "3s down. Rear foot elevated. Control the depth." },
+            { name: "KB Front Squat",               sets: 3, reps: "8",      rest: "75s", notes: "Both hands, rack position, upright torso" },
+            { name: "Nordic Hamstring Curl",        sets: 3, reps: "6",      rest: "90s", notes: "Eccentric focus" },
+            { name: "Single-Leg Calf Raise (step)", sets: 3, reps: "15/leg", rest: "45s", notes: "Full range, 2s pause at bottom" },
           ]
         },
-        sunday: {
-          title: "LSD Run + Mobility", warmup: null,
-          note: "Easy Zone 2 jog, 5km building to 8km by Week 12. Follow immediately with 20-min mobility flow.",
-          exercises: []
-        }
       },
       milestones: [
-        { id: 'm3_dip',      text: 'Dip — 4 × 8, full depth (shoulder below elbow) every rep' },
-        { id: 'm3_pullup',   text: 'Pull-Up — 5 strict dead-hang reps' },
-        { id: 'm3_kb_press', text: 'KB Clean + Press — 4 × 5/arm with 16kg, smooth rack + overhead lockout' },
-        { id: 'm3_kb_swing', text: 'One-Arm KB Swing — 4 × 12/arm with 16kg' },
-        { id: 'm3_lsd',      text: 'Sunday LSD — 7km easy without stopping' },
+        { id: 'p3_wpullup', text: 'Weighted Pull-Up — 4×5 with +10kg, strict dead hang start each rep' },
+        { id: 'p3_wdip',    text: 'Weighted Dip — 4×6 with +10kg, full depth every rep' },
+        { id: 'p3_muneg',   text: 'Muscle-Up Negative — 3×3 smooth controlled descent, no crashing' },
+        { id: 'p3_press',   text: 'KB Clean + Press — 4×5/arm with 16kg, overhead lockout' },
+        { id: 'p3_lsd',     text: 'Sunday LSD — 10km easy without stopping' },
       ],
       runningPlan: {
-        note: "Wednesday adds strides. Sunday LSD returns. Thursday PM extends. Strides: 100m at 80% effort — not sprints. 60–90s walk recovery between each.",
-        weeklyVolume: "~22–28km/week",
+        note: "Zone 3 pace: 5:10–5:40 min/km — 3–4 words per breath. Sun LSD hits 10km Week 13. Week 14 deload.",
+        weeklyVolume: "~25–30km/week",
         weeks: [
-          { label: "Week 9",          satParkrun: "5km race",   sunLSD: "5km easy",  tuePM: "—", wed: "30 min + 4 × 100m strides", thuPM: "20 min easy" },
-          { label: "Week 10",         satParkrun: "5km race",   sunLSD: "6km easy",  tuePM: "—", wed: "32 min + 4 strides",         thuPM: "22 min easy" },
-          { label: "Week 11",         satParkrun: "5km race",   sunLSD: "7km easy",  tuePM: "—", wed: "35 min + 4 strides",         thuPM: "25 min easy" },
-          { label: "Week 12 (Deload)",satParkrun: "5km easy",   sunLSD: "5km easy",  tuePM: "—", wed: "25 min easy Z2",             thuPM: "—", deload: true },
+          { label: "Week 11 (16 Aug)",           satParkrun: "5km race", sunLSD: "8km easy",  tuePM: "—", wed: "35 min + 2km Z3", thuPM: "25 min Z1*" },
+          { label: "Week 12 (23 Aug)",           satParkrun: "5km race", sunLSD: "9km easy",  tuePM: "—", wed: "37 min + 2km Z3", thuPM: "25 min Z1*" },
+          { label: "Week 13 (30 Aug)",           satParkrun: "5km race", sunLSD: "10km easy", tuePM: "—", wed: "40 min + 2km Z3", thuPM: "25 min Z1*" },
+          { label: "Week 14 (06 Sep) — Deload",  satParkrun: "5km easy", sunLSD: "7km easy",  tuePM: "—", wed: "28 min Z2 easy",  thuPM: "REST", deload: true },
         ]
       }
     },
 
-    /* ── MONTH 4: Strength + Endurance ───────────────── */
+    /* ── PHASE 4: STRENGTH & ENDURANCE — Weeks 15–18 ──── */
     {
-      id: 4, name: "Strength + Endurance", months: [4],
-      theme: "Plyometrics enter Thursday. Muscle-up and pistol squat foundations. Weighted calisthenics begin. Running tempo introduced on Wednesdays.",
+      id: 4, name: "Phase 4: Strength & Endurance", startWeek: 15, endWeek: 18, weekCount: 4,
+      theme: "4 full gym days activate. Plyometrics enter Thursday. Muscle-up and pistol squat foundations. Wednesday tempo. You should feel this step up.",
       weeklySchedule: {
         monday:    { am: "Full REST", pm: null, duration: null },
-        tuesday:   { am: "Calisthenics Upper — Push Focus", pm: "Easy run 5km (Zone 2)", duration: "AM 55 / PM 35 min" },
-        wednesday: { am: "Hard Run — Strides + Zone 3 intro", pm: null, duration: "45–55 min" },
-        thursday:  { am: "KB Power + Plyometrics", pm: "Easy run 5km (Zone 1–2)*", duration: "AM 55 / PM 35 min" },
-        friday:    { am: "Calisthenics Skills + Core", pm: null, duration: "55 min" },
-        saturday:  { am: "Parkrun 5km (race effort)", pm: null, duration: "30–35 min" },
-        sunday:    { am: "LSD Run — Zone 2", pm: null, duration: "55–75 min" },
+        tuesday:   { am: "Gym: Upper Push (heavy)", pm: "Easy run 5km (Zone 2)", duration: "AM 60 / PM 35 min" },
+        wednesday: { am: "Tempo Run", pm: null, duration: "50–60 min" },
+        thursday:  { am: "Gym: KB Power + Plyometrics", pm: "Easy run 5km (Zone 1–2)*", duration: "AM 60 / PM 35 min" },
+        friday:    { am: "Gym: Skills + Core", pm: null, duration: "60 min" },
+        saturday:  { am: "Parkrun 5km — race effort", pm: null, duration: "30–35 min" },
+        sunday:    { am: "LSD Run — Zone 2", pm: null, duration: "65–80 min" },
       },
       workouts: {
         tuesday: {
-          title: "Calisthenics Upper: Push Focus", warmup: "Universal protocol + 2 × 10 scapular push-ups",
+          title: "Upper Push (Heavy)", warmup: "Universal protocol (8 min) + band pull-aparts 2×15",
           exercises: [
-            { name: "Archer Push-Up",                  sets: 4, reps: "6/side",  rest: "90s", notes: "Primary movement. Widen one hand, lean and press. 3s down." },
-            { name: "Weighted Push-Up (plate on back)", sets: 3, reps: "8–10",   rest: "90s", notes: "5–10kg plate. Keep body plank-straight throughout." },
-            { name: "Parallel Bar Dip (weighted)",      sets: 4, reps: "6–8",    rest: "90s", notes: "Add 5kg if 4 × 10 bodyweight is easy. Full depth non-negotiable." },
-            { name: "Pike Push-Up (feet on bench)",     sets: 3, reps: "8–10",   rest: "90s", notes: "Progressing toward handstand push-up position" },
-            { name: "Planche Lean (against wall)",      sets: 3, reps: "15–20s", rest: "60s", notes: "Forward lean on straight arms — shoulder protraction strength" },
+            { name: "Archer Push-Up",               sets: 4, reps: "6/side",  rest: "90s", notes: "Primary — 3s eccentric, controlled throughout" },
+            { name: "Weighted Dip (+10kg)",         sets: 4, reps: "6–8",    rest: "90s", notes: "Full depth. Add weight only when form is perfect." },
+            { name: "Pike Push-Up (elevated feet)",  sets: 3, reps: "8–10",  rest: "90s", notes: "Closer to handstand push-up each week" },
+            { name: "Wide Push-Up (slow eccentric)", sets: 3, reps: "10–12", rest: "75s", notes: "3s down — chest development" },
+            { name: "Planche Lean (wall)",           sets: 3, reps: "20–25s",rest: "60s", notes: "Forward lean — shoulder protraction strength" },
           ]
         },
         thursday: {
-          title: "KB Power + Plyometrics", warmup: "Universal protocol. KB block FIRST (15–20 min), then plyometrics (20–25 min).",
-          note: "Never do plyometrics cold. KB warm-up ensures joints are prepared for impact.",
+          title: "KB Power + Plyometrics", warmup: "KB block first (15–20 min), then plyometrics",
+          note: "KB first then plyometrics — never do plyometrics cold. Plyometric injury risk: land softly, bent knees. Stop for any knee or ankle soreness.",
           exercises: [
-            { name: "One-Arm KB Swing",      sets: 4, reps: "12/arm", rest: "75s",  notes: "Hip snap — not arm pull. Full hip extension at top." },
-            { name: "KB Clean + Press",      sets: 4, reps: "6/arm",  rest: "90s",  notes: "Smooth clean, overhead lockout, controlled descent" },
-            { name: "KB Front Squat",        sets: 3, reps: "8",      rest: "75s",  notes: "Both hands, rack position, full depth, upright torso" },
-            { name: "KB Turkish Get-Up",     sets: 3, reps: "3/side", rest: "120s", notes: "Slow and deliberate — shoulder stability and full-body control" },
-            { name: "Box Jump (40cm)",       sets: 3, reps: "5",      rest: "90s",  notes: "Step down — do not jump down. Reset each rep." },
-            { name: "Broad Jump",            sets: 3, reps: "5",      rest: "90s",  notes: "Max distance, land soft with bent knees" },
-            { name: "Lateral Bound",         sets: 3, reps: "6/side", rest: "60s",  notes: "Push off outside foot, land balanced" },
-            { name: "Depth Drop (30cm box)", sets: 3, reps: "5",      rest: "90s",  notes: "Absorb on landing — NOT a jump. Teach landing mechanics first." },
+            { name: "One-Arm KB Swing",    sets: 4, reps: "12/arm", rest: "75s",  notes: "Full hip extension at top" },
+            { name: "KB Clean + Press",    sets: 4, reps: "6/arm",  rest: "90s",  notes: "Smooth rack, overhead lockout, controlled descent" },
+            { name: "KB Front Squat",      sets: 3, reps: "8",      rest: "75s",  notes: "Upright torso, full depth" },
+            { name: "KB Turkish Get-Up",   sets: 3, reps: "3/side", rest: "120s", notes: "Slow and deliberate — shoulder stability" },
+            { name: "Box Jump (40cm)",     sets: 3, reps: "5",      rest: "90s",  notes: "Step down — do not jump down. Reset each rep." },
+            { name: "Broad Jump",          sets: 3, reps: "5",      rest: "90s",  notes: "Max distance, land soft with bent knees" },
+            { name: "Lateral Bound",       sets: 3, reps: "6/side", rest: "60s",  notes: "Push off outside foot, land balanced" },
+            { name: "Depth Drop (30cm)",   sets: 3, reps: "5",      rest: "90s",  notes: "Absorb landing — teach mechanics before jumping" },
+            { name: "Skipping High Knees", sets: 3, reps: "20s",    rest: "45s",  notes: "Knees above waist, fast turnover" },
           ]
         },
         friday: {
-          title: "Calisthenics Skills + Core", warmup: "Universal protocol (8 min)",
-          note: "Muscle-up and pistol squat foundations. Skill practice — not max effort.",
+          title: "Skills + Core (Muscle-Up + Pistol Foundations)", warmup: "Universal protocol (8 min). Skill practice — quality over quantity.",
           exercises: [
-            { name: "Pull-Up (strict, full ROM)",             sets: 4, reps: "6–10",  rest: "120s", notes: "Add weight belt (+5kg) if 8+ reps feel easy" },
-            { name: "Explosive Pull-Up",                       sets: 3, reps: "4–5",   rest: "120s", notes: "Pull chest to bar — not just chin. Explosive concentric." },
-            { name: "Bar Muscle-Up Negative",                  sets: 3, reps: "3",     rest: "120s", notes: "Jump above bar, slow lower in transition — learning the pattern" },
-            { name: "L-Sit (parallettes or floor)",            sets: 3, reps: "10–15s",rest: "60s",  notes: "Core compression — legs as straight as possible" },
-            { name: "Toes-to-Bar",                            sets: 3, reps: "8–10",  rest: "75s",  notes: "No swinging — dead stop between reps" },
-            { name: "Assisted Pistol Squat (TRX/ring/door)",  sets: 3, reps: "6/leg", rest: "90s",  notes: "Full depth — hip crease below knee. Use support for balance only." },
-            { name: "Shrimp Squat",                           sets: 3, reps: "6/leg", rest: "90s",  notes: "Rear foot held, knee taps floor, controlled descent" },
+            { name: "Pull-Up (strict, full ROM)",  sets: 4, reps: "6–10",   rest: "120s", notes: "Add weight if 8+ reps easy" },
+            { name: "Explosive Pull-Up",           sets: 3, reps: "4–5",    rest: "120s", notes: "Pull chest to bar — explosive concentric" },
+            { name: "Bar Muscle-Up Negative",      sets: 3, reps: "3",      rest: "120s", notes: "Jump above bar, slow lower through transition" },
+            { name: "L-Sit Hold (bars or floor)",  sets: 3, reps: "10–15s", rest: "60s",  notes: "Legs as straight as possible" },
+            { name: "Toes-to-Bar",                 sets: 3, reps: "8–10",   rest: "75s",  notes: "No swinging — dead stop between reps" },
+            { name: "Assisted Pistol Squat",       sets: 3, reps: "6/leg",  rest: "90s",  notes: "Ring or door. Full depth — hip crease below knee." },
+            { name: "Shrimp Squat",                sets: 3, reps: "6/leg",  rest: "90s",  notes: "Rear foot held, knee taps floor" },
           ]
         },
-        sunday: {
-          title: "LSD Run — Zone 2", warmup: null,
-          note: "Zone 2 only. If you cannot speak in full sentences, you are going too fast.",
-          exercises: []
-        }
       },
       milestones: [
-        { id: 'm4_w_dip',   text: 'Weighted Dip — 4 × 6 with +10kg, full depth every rep' },
-        { id: 'm4_pullup',  text: 'Pull-Up — 8 strict unweighted OR 4 × 5 with +5kg' },
-        { id: 'm4_mu_neg',  text: 'Muscle-Up Negative — 3 × 3, smooth controlled descent through transition' },
-        { id: 'm4_pistol',  text: 'Assisted Pistol Squat — 3 × 6/leg consistently, hip crease below knee' },
-        { id: 'm4_plyo',    text: 'Plyometrics — box jump + broad jump landing quiet and controlled (soft knees)' },
+        { id: 'p4_muneg',  text: 'Muscle-Up Negative — 3×3 smooth, no crashing in transition' },
+        { id: 'p4_pistol', text: 'Pistol Squat — assisted to full depth, 3×6/leg consistently' },
+        { id: 'p4_plyo',   text: 'Box jump and broad jump — landing quiet and controlled' },
+        { id: 'p4_wdip',   text: 'Weighted Dip — 4×8 with +10kg, full depth every rep' },
+        { id: 'p4_lsd',    text: 'Sunday LSD — 12km easy without stopping' },
       ],
       runningPlan: {
-        note: "Wednesday introduces tempo. *Thursday PM conditional — check recovery load table. Tempo pace: 5:00–5:30 min/km.",
+        note: "Tempo pace 5:00–5:30 min/km. Tue/Thu PM Zone 2/Zone 1 only. Week 18 deload — drop PM runs.",
         weeklyVolume: "~32–38km/week",
         weeks: [
-          { label: "Week 13",          satParkrun: "5km race", sunLSD: "9km",  tuePM: "5km easy Z2", wed: "6km + 4 × 100m strides", thuPM: "5km easy*" },
-          { label: "Week 14",          satParkrun: "5km race", sunLSD: "10km", tuePM: "5km easy Z2", wed: "7km easy",               thuPM: "5km easy*" },
-          { label: "Week 15",          satParkrun: "5km race", sunLSD: "11km", tuePM: "6km easy Z2", wed: "7km + 2km tempo",        thuPM: "5km easy*" },
-          { label: "Week 16 (Deload)", satParkrun: "5km easy", sunLSD: "8km",  tuePM: "—",           wed: "5km easy",               thuPM: "—", deload: true },
+          { label: "Week 15 (13 Sep)",           satParkrun: "5km race", sunLSD: "10km", tuePM: "5km Z2", wed: "6km + 4 strides",  thuPM: "5km Z1*" },
+          { label: "Week 16 (20 Sep)",           satParkrun: "5km race", sunLSD: "11km", tuePM: "5km Z2", wed: "7km easy",          thuPM: "5km Z1*" },
+          { label: "Week 17 (27 Sep)",           satParkrun: "5km race", sunLSD: "12km", tuePM: "6km Z2", wed: "7km + 2km tempo",   thuPM: "5km Z1*" },
+          { label: "Week 18 (04 Oct) — Deload",  satParkrun: "5km easy", sunLSD: "8km",  tuePM: "REST",   wed: "5km easy",          thuPM: "REST", deload: true },
         ]
       }
     },
 
-    /* ── MONTH 5: Intensity Phase ─────────────────────── */
+    /* ── PHASE 5: INTENSITY — Weeks 19–22 ─────────────── */
     {
-      id: 5, name: "Intensity Phase", months: [5],
-      theme: "Heavy calisthenics upper. HIIT skipping enters Thursday. Handstand work begins. Running hits 40km+ week. This is where the body really starts to change.",
+      id: 5, name: "Phase 5: Intensity", startWeek: 19, endWeek: 22, weekCount: 4,
+      theme: "HIIT skipping enters Thursday. Heavy weighted calisthenics on Tuesday. Handstand holds at wall. Running hits 40km+ per week.",
       weeklySchedule: {
-        monday:    { am: "Full REST + Full Mobility Session", pm: null, duration: "35 min" },
-        tuesday:   { am: "Heavy Calisthenics Upper", pm: "Easy run 5–6km (Zone 2)", duration: "AM 60 / PM 35 min" },
-        wednesday: { am: "Hard Run — Tempo 8–9km", pm: null, duration: "60–70 min" },
-        thursday:  { am: "HIIT Skipping + Plyometrics", pm: "Easy run 4–5km (Zone 1–2)*", duration: "AM 55 / PM 30 min" },
-        friday:    { am: "Gym Strength Complement", pm: null, duration: "60 min" },
-        saturday:  { am: "Parkrun 5km (target sub-25 min)", pm: null, duration: "30–35 min" },
-        sunday:    { am: "LSD — Zone 2 (12–14km)", pm: null, duration: "80–100 min" },
-      },
-      workouts: {
-        tuesday: {
-          title: "Heavy Calisthenics Upper", warmup: "Universal protocol + band pull-aparts 2 × 15",
-          note: "Muscle-ups: only attempt if 8+ strict pull-ups and negatives are fully controlled.",
-          exercises: [
-            { name: "Weighted Pull-Up (+5–10kg)",  sets: 5, reps: "4–6",    rest: "150s", notes: "Slow eccentric (3s down). Full dead-hang between reps." },
-            { name: "Bar Muscle-Up",               sets: 3, reps: "2–4",    rest: "180s", notes: "Full lockout at top. Only attempt if negatives are fully controlled." },
-            { name: "Ring / Bar Dip (weighted)",   sets: 4, reps: "8–10",   rest: "120s", notes: "Control the descent. Rings add instability — harder than bar." },
-            { name: "Archer Push-Up",              sets: 4, reps: "6/side", rest: "90s",  notes: "Strict form — no rotation of the hips or torso" },
-            { name: "Handstand Hold (wall)",        sets: 4, reps: "20–30s", rest: "90s",  notes: "Kick up, hands shoulder-width, work toward freestanding" },
-            { name: "L-Sit to Tuck-L Progression", sets: 3, reps: "15–20s", rest: "75s",  notes: "Compress as hard as possible — this is core strength" },
-          ]
-        },
-        thursday: {
-          title: "HIIT Skipping + Plyometrics", warmup: "5 min easy skip before any HIIT or plyometric work",
-          note: "Long Wednesday (9km+) → Session A Tabata. Easy Wednesday → Session B Pyramid. Never do Session B after a hard tempo run.",
-          exercises: [
-            { name: "Skipping — Tabata (Session A)", sets: 8,  reps: "20s max/10s rest", rest: "—",   notes: "Double-unders → crossovers → high-knees alternating" },
-            { name: "Box Jump",                      sets: 3,  reps: "5",                rest: "90s", notes: "Step down — do not jump down. Reset each rep." },
-            { name: "Broad Jump",                    sets: 3,  reps: "5",                rest: "90s", notes: "Max distance, land soft with bent knees" },
-            { name: "Lateral Bound",                 sets: 3,  reps: "6/side",           rest: "60s", notes: "Push off outside foot, land balanced" },
-            { name: "Depth Drop (30cm box)",         sets: 3,  reps: "5",                rest: "90s", notes: "Absorb on landing — NOT a jump." },
-            { name: "High Knees Skip",               sets: 3,  reps: "20s",              rest: "45s", notes: "Knees above waist, fast turnover" },
-          ]
-        },
-        friday: {
-          title: "Gym Strength Complement", warmup: "Universal protocol",
-          note: "NO heavy squats Friday — day before parkrun. Upper and posterior chain focused.",
-          exercises: [
-            { name: "Barbell Romanian Deadlift", sets: 4, reps: "6–8",   rest: "120s", notes: "80–100kg target. Hip hinge, flat back, feel the hamstring." },
-            { name: "Barbell Overhead Press",    sets: 3, reps: "6–8",   rest: "120s", notes: "Shoulder mass and stability for handstand work" },
-            { name: "Cable Row (narrow grip)",   sets: 4, reps: "10–12", rest: "90s",  notes: "Retract scapula fully — lat and mid-back strength" },
-            { name: "Leg Press (single leg)",    sets: 3, reps: "10/leg",rest: "90s",  notes: "Pistol squat leg strength without balance challenge" },
-            { name: "Farmer's Carry",            sets: 3, reps: "40m",   rest: "90s",  notes: "2 × 24kg — full-body stability and grip" },
-          ]
-        },
-        sunday: {
-          title: "LSD — Zone 2 (12–14km)", warmup: null,
-          note: "Zone 2 only. If Sunday LSD exceeds 12km and legs are dead Monday: add 10 min foam rolling Monday morning.",
-          exercises: []
-        }
-      },
-      milestones: [
-        { id: 'm5_mu',      text: 'Bar Muscle-Up — 3 consecutive reps, full lockout at top' },
-        { id: 'm5_wpullup', text: 'Weighted Pull-Up — 5 reps with +10kg, strict dead-hang start' },
-        { id: 'm5_hs',      text: 'Handstand Hold (wall) — 30s consistently, straight body' },
-        { id: 'm5_pistol',  text: 'Pistol Squat — freestanding or 1 finger support, 5 reps/leg' },
-        { id: 'm5_hiit',    text: 'HIIT Skipping — complete Session B pyramid without stopping' },
-      ],
-      runningPlan: {
-        note: "Wednesday tempo grows. Thursday PM conditional on Wednesday distance. Sunday LSD hits 14km. *Check recovery load table before Thursday PM.",
-        weeklyVolume: "~40–48km/week",
-        weeks: [
-          { label: "Week 17",          satParkrun: "5km race", sunLSD: "12km", tuePM: "5km easy Z2", wed: "8km + 2km tempo",  thuPM: "5km easy*" },
-          { label: "Week 18",          satParkrun: "5km race", sunLSD: "13km", tuePM: "6km easy Z2", wed: "9km easy",         thuPM: "4km easy*" },
-          { label: "Week 19",          satParkrun: "5km race", sunLSD: "14km", tuePM: "6km easy Z2", wed: "9km + 3km tempo",  thuPM: "5km easy*" },
-          { label: "Week 20 (Deload)", satParkrun: "5km easy", sunLSD: "10km", tuePM: "—",           wed: "6km easy",         thuPM: "—", deload: true },
-        ]
-      }
-    },
-
-    /* ── MONTH 6: Peak Conditioning ──────────────────── */
-    {
-      id: 6, name: "Peak Conditioning", months: [6],
-      theme: "Highest calisthenics complexity. Running approaches half-marathon distance. Skills consolidate. Body composition changes become very visible this month.",
-      weeklySchedule: {
-        monday:    { am: "Full REST + Deep Recovery Session", pm: null, duration: "40 min" },
-        tuesday:   { am: "Calisthenics Skills — Muscle-Up, Pistol, HSPU", pm: "Easy run 5–6km (Zone 2)", duration: "AM 65 / PM 35 min" },
-        wednesday: { am: "Tempo Run — 10–12km", pm: null, duration: "70–80 min" },
-        thursday:  { am: "Gym: Barbell Strength + KB Complex", pm: "Easy run 4–5km (Zone 1)*", duration: "AM 65 / PM 30 min" },
-        friday:    { am: "Calisthenics Upper/Lower", pm: null, duration: "65 min" },
-        saturday:  { am: "Parkrun 5km (target sub-25 min)", pm: null, duration: "30–35 min" },
+        monday:    { am: "Full REST + Full Mobility (mandatory)", pm: null, duration: "35 min" },
+        tuesday:   { am: "Gym: Heavy Calisthenics Upper", pm: "Easy run 5–6km (Zone 2)", duration: "AM 65 / PM 35 min" },
+        wednesday: { am: "Hard Run — Tempo 8–9km", pm: null, duration: "65–75 min" },
+        thursday:  { am: "Gym: HIIT Skipping + Plyometrics", pm: "Easy run 4–5km (Zone 1)*", duration: "AM 55 / PM 30 min" },
+        friday:    { am: "Gym: Barbell Strength Complement", pm: null, duration: "65 min" },
+        saturday:  { am: "Parkrun 5km — target sub-28 min", pm: null, duration: "30–35 min" },
         sunday:    { am: "LSD — Zone 2 (14–16km)", pm: null, duration: "90–110 min" },
       },
       workouts: {
-        tuesday: {
-          title: "Calisthenics Skills — Muscle-Up, Pistol, HSPU", warmup: "Universal protocol + band pull-aparts 2 × 15",
-          note: "Handstand push-up: key is a straight body line, not just pushing up. Work hollow body holds if lower back arches.",
+        monday: {
+          title: "Full Mobility Session", warmup: null,
+          note: "At this volume, Monday is active recovery. Skip it and injury risk climbs significantly.",
           exercises: [
-            { name: "Bar or Ring Muscle-Up",            sets: 5, reps: "3–5",    rest: "180s", notes: "Full lockout. 3 min rest. Quality over quantity." },
-            { name: "False Grip Ring Row",              sets: 3, reps: "8",      rest: "90s",  notes: "Build false grip strength for ring muscle-up" },
-            { name: "Freestanding Handstand Practice",  sets: 1, reps: "10 min", rest: "—",    notes: "Kick up attempts — try without wall. Count seconds held." },
-            { name: "Handstand Push-Up (wall)",         sets: 4, reps: "4–6",    rest: "120s", notes: "Head to floor, full lockout. Controlled descent." },
-            { name: "Pistol Squat (freestanding)",      sets: 4, reps: "5/leg",  rest: "120s", notes: "3s down. Full depth. Other leg straight in front." },
-            { name: "Shrimp Squat",                    sets: 3, reps: "6/leg",  rest: "90s",  notes: "Opposite leg training to pistol — rear foot held, knee taps floor" },
+            { name: "Foam roll: quads, IT band, thoracic", sets: 1, reps: "2 min each", rest: "—", notes: "Pause on tender spots — don't roll over joints" },
+            { name: "Hip flexor kneeling stretch",          sets: 1, reps: "2 min/side", rest: "—", notes: "Posterior pelvic tilt at bottom of stretch" },
+            { name: "Seated hamstring + dorsiflexion",      sets: 1, reps: "2 min/side", rest: "—", notes: "Flex foot — hits calf and hamstring together" },
+            { name: "Thoracic rotation (ground)",           sets: 1, reps: "10/side",    rest: "—", notes: "Hips stacked — rotate from mid-back only" },
+            { name: "Deep squat hold + rocks",              sets: 1, reps: "2 min",      rest: "—", notes: "Explore range, breathe into tight spots" },
+            { name: "Shoulder cross-body + doorway",        sets: 1, reps: "2 min each", rest: "—", notes: "Posterior capsule + pec minor — essential for muscle-ups" },
+            { name: "Box breathing",                        sets: 1, reps: "5 min",      rest: "—", notes: "4s in · 4s hold · 4s out · 4s hold" },
+          ]
+        },
+        tuesday: {
+          title: "Heavy Calisthenics Upper", warmup: "Universal protocol (8 min) + band pull-aparts 2×15",
+          exercises: [
+            { name: "Weighted Pull-Up (+10kg)", sets: 5, reps: "4–6",   rest: "150s", notes: "Slow 3s eccentric. Full dead-hang between reps." },
+            { name: "Bar Muscle-Up",            sets: 3, reps: "2–4",   rest: "180s", notes: "Full lockout at top. Only if negatives are fully controlled." },
+            { name: "Ring / Bar Dip (+10kg)",   sets: 4, reps: "8–10",  rest: "120s", notes: "Control the descent. Full range." },
+            { name: "Archer Push-Up",           sets: 4, reps: "6/side",rest: "90s",  notes: "Strict form — no rotation of hips or torso" },
+            { name: "Handstand Hold (wall)",    sets: 4, reps: "20–30s",rest: "90s",  notes: "Kick up, hands shoulder-width, straight body line" },
+            { name: "L-Sit to Tuck-L",          sets: 3, reps: "15–20s",rest: "75s",  notes: "Compress as hard as possible" },
           ]
         },
         thursday: {
-          title: "Gym: Barbell Strength + KB Complex", warmup: "Universal protocol (8 min). Heavy barbell work first.",
+          title: "HIIT Skipping + Plyometrics", warmup: "5 min easy skip before any HIIT work",
+          note: "Long Wednesday (9km+) → Session A (Tabata). Easy Wednesday → Session B (Pyramid). Never Session B after hard tempo.",
+          sessionA: {
+            label: "Session A — Tabata (after long Wednesday 9km+):",
+            steps: [
+              "Tabata skip: 8 rounds × 20s max / 10s rest — double-unders → crossovers → high-knees (4 min + 5 min easy skip bookends)",
+              "Plyometrics: 3 sets each — box jump, broad jump, lateral bound, depth drop, high-knee skip (20 min)"
+            ]
+          },
+          sessionB: {
+            label: "Session B — Pyramid (after easy Wednesday):",
+            steps: [
+              "Round 1: 30s max skip / 30s rest",
+              "Round 2: 45s max skip / 30s rest",
+              "Round 3: 60s max skip / 30s rest",
+              "Round 4: 45s / 30s rest",
+              "Round 5: 30s + 2 min continuous moderate skip / 30s rest"
+            ]
+          },
+        },
+        friday: {
+          title: "Barbell Strength Complement", warmup: "Universal protocol (8 min). No heavy squats — day before parkrun.",
           exercises: [
-            { name: "Deadlift (conventional)",            sets: 4, reps: "5",       rest: "180s", notes: "Target 100–120kg. Hip hinge, full lockout, controlled descent." },
-            { name: "Weighted Pull-Up",                   sets: 4, reps: "4–5",     rest: "150s", notes: "Target +10–15kg. Dead hang start each rep." },
-            { name: "Barbell Front Squat",               sets: 4, reps: "6",       rest: "120s", notes: "Upright torso — develops pistol squat strength" },
-            { name: "Incline Dumbbell Press",            sets: 3, reps: "10",      rest: "90s",  notes: "Shoulder and chest mass support for muscle-up" },
-            { name: "KB Complex (swing→clean→press)",    sets: 3, reps: "5+5+5/arm",rest: "120s",notes: "No rest between movements in each round. 16kg." },
+            { name: "Barbell Romanian Deadlift", sets: 4, reps: "6–8",    rest: "120s", notes: "80–100kg target. Hip hinge, flat back." },
+            { name: "Barbell Overhead Press",    sets: 3, reps: "6–8",    rest: "120s", notes: "Shoulder mass for handstand work" },
+            { name: "Cable Row (narrow grip)",   sets: 4, reps: "10–12",  rest: "90s",  notes: "Retract scapula fully — lat and mid-back" },
+            { name: "Leg Press (single leg)",    sets: 3, reps: "10/leg", rest: "90s",  notes: "Pistol squat leg strength" },
+            { name: "Farmer's Carry",            sets: 3, reps: "40m",    rest: "90s",  notes: "2×24kg — full-body stability and grip" },
+          ]
+        },
+      },
+      milestones: [
+        { id: 'p5_mu',      text: 'Bar Muscle-Up — 3 consecutive reps, full lockout, no kipping' },
+        { id: 'p5_wpullup', text: 'Weighted Pull-Up — 5 reps with +12kg strict' },
+        { id: 'p5_hs',      text: 'Handstand Hold — 30s at wall, straight body, no banana back' },
+        { id: 'p5_pistol',  text: 'Pistol Squat — freestanding or 1-finger support, 5 reps/leg' },
+        { id: 'p5_lsd',     text: 'Sunday LSD — 16km easy without stopping' },
+      ],
+      runningPlan: {
+        note: "Zone 2: 5:45–6:30/km. Zone 4 tempo: 4:45–5:10/km. Week 22 deload — drop PM runs.",
+        weeklyVolume: "~40–46km/week",
+        weeks: [
+          { label: "Week 19 (11 Oct)",           satParkrun: "5km race", sunLSD: "14km", tuePM: "5km Z2", wed: "8km + 2km tempo",  thuPM: "5km Z1*" },
+          { label: "Week 20 (18 Oct)",           satParkrun: "5km race", sunLSD: "15km", tuePM: "6km Z2", wed: "9km easy",          thuPM: "4km Z1*" },
+          { label: "Week 21 (25 Oct)",           satParkrun: "5km race", sunLSD: "16km", tuePM: "6km Z2", wed: "9km + 3km tempo",   thuPM: "5km Z1*" },
+          { label: "Week 22 (01 Nov) — Deload",  satParkrun: "5km easy", sunLSD: "12km", tuePM: "REST",   wed: "6km easy",          thuPM: "REST", deload: true },
+        ]
+      }
+    },
+
+    /* ── PHASE 6: PEAK CONDITIONING — Weeks 23–26 ────── */
+    {
+      id: 6, name: "Phase 6: Peak Conditioning", startWeek: 23, endWeek: 26, weekCount: 4,
+      theme: "Highest complexity. Tuesday becomes dedicated skills session. LSD hits 22km. Sub-25 parkrun target. Body composition changes are very visible now.",
+      weeklySchedule: {
+        monday:    { am: "Full REST + Deep Recovery (mandatory)", pm: null, duration: "40 min" },
+        tuesday:   { am: "Gym: Calisthenics Skills Session", pm: "Easy run 5–6km (Zone 2)", duration: "AM 65 / PM 35 min" },
+        wednesday: { am: "Tempo Run — 10–13km", pm: null, duration: "75–85 min" },
+        thursday:  { am: "Gym: Barbell + KB Complex", pm: "Easy run 4–5km (Zone 1)*", duration: "AM 65 / PM 30 min" },
+        friday:    { am: "Gym: Calisthenics Upper/Lower", pm: null, duration: "65 min" },
+        saturday:  { am: "Parkrun 5km — target sub-25 min", pm: null, duration: "30–35 min" },
+        sunday:    { am: "LSD — Zone 2 (18–22km)", pm: null, duration: "110–140 min" },
+      },
+      workouts: {
+        tuesday: {
+          title: "Calisthenics Skills Session", warmup: "Universal protocol (8 min) + band pull-aparts",
+          blocks: [
+            { block: "Muscle-Up", exercises: [
+              { name: "Bar or Ring Muscle-Up", setsReps: "5×3–5", detail: "Full lockout. 3 min rest. Quality over quantity." },
+              { name: "False Grip Ring Row",    setsReps: "3×8",   detail: "Build false grip for ring muscle-up" },
+            ]},
+            { block: "Handstand", exercises: [
+              { name: "Freestanding HS Practice",  setsReps: "10 min", detail: "Kick up, try without wall. Count seconds held." },
+              { name: "Handstand Push-Up (wall)",   setsReps: "4×4–6",  detail: "Head to floor, full lockout, controlled descent" },
+            ]},
+            { block: "Pistol", exercises: [
+              { name: "Pistol Squat (freestanding)", setsReps: "4×5/leg", detail: "3s down. Full depth. Other leg straight." },
+              { name: "Shrimp Squat",               setsReps: "3×6/leg", detail: "Opposite side — rear foot held, knee taps floor" },
+            ]},
+          ]
+        },
+        thursday: {
+          title: "Barbell Strength + KB Complex", warmup: "Universal protocol (8 min). Heavy barbell first, KB complex as finisher.",
+          exercises: [
+            { name: "Deadlift (conventional)",          sets: 4, reps: "5",          rest: "180s", notes: "Target 100–120kg. Full lockout, controlled descent." },
+            { name: "Weighted Pull-Up",                 sets: 4, reps: "4–5",        rest: "150s", notes: "Target +12–15kg. Dead hang start." },
+            { name: "Barbell Front Squat",              sets: 4, reps: "6",          rest: "120s", notes: "Upright torso — pistol squat carry-over" },
+            { name: "Incline Dumbbell Press",           sets: 3, reps: "10",         rest: "90s",  notes: "Shoulder mass support for muscle-up" },
+            { name: "KB Complex (swing→clean→press)",   sets: 3, reps: "5+5+5/arm",  rest: "120s", notes: "No rest between movements. 16kg." },
           ]
         },
         friday: {
-          title: "Calisthenics Upper/Lower", warmup: "Universal protocol (8 min)",
+          title: "Calisthenics Upper/Lower", warmup: "Universal protocol (8 min). Accessory volume — not max effort.",
           exercises: [
-            { name: "Weighted Pull-Up or Ring Row",    sets: 4, reps: "6–8",   rest: "120s", notes: "Accessory pull volume — not max effort" },
-            { name: "Ring Dip",                        sets: 4, reps: "8–10",  rest: "90s",  notes: "Control the rings — harder than bar. Full depth." },
-            { name: "Bulgarian Split Squat",           sets: 3, reps: "8/leg", rest: "90s",  notes: "Weighted if bodyweight is easy — 2 × 10kg DBs" },
-            { name: "Pike Push-Up (elevated feet)",    sets: 3, reps: "8–10",  rest: "90s",  notes: "Keep progressing toward HSPU" },
-            { name: "Single-Leg Calf Raise",           sets: 3, reps: "15/leg",rest: "45s",  notes: "Off a step — Achilles health, never skip" },
-            { name: "L-Sit + Toes-to-Bar (superset)", sets: 3, reps: "15s + 8 reps",rest: "60s",notes: "Core finisher — no rest between L-sit and T2B" },
+            { name: "Weighted Pull-Up or Ring Row",    sets: 4, reps: "6–8",          rest: "120s", notes: "Accessory pull volume" },
+            { name: "Ring Dip",                        sets: 4, reps: "8–10",         rest: "90s",  notes: "Control the rings. Full depth." },
+            { name: "Bulgarian Split Squat (weighted)", sets: 3, reps: "8/leg",       rest: "90s",  notes: "2×10kg DBs if bodyweight too easy" },
+            { name: "Pike Push-Up (elevated feet)",    sets: 3, reps: "8–10",         rest: "90s",  notes: "Keep progressing toward HSPU" },
+            { name: "Single-Leg Calf Raise",           sets: 3, reps: "15/leg",       rest: "45s",  notes: "Off a step — never skip" },
+            { name: "L-Sit + Toes-to-Bar (superset)",  sets: 3, reps: "15s + 8 reps",rest: "60s",  notes: "No rest between the two" },
           ]
         },
-        sunday: {
-          title: "LSD — Zone 2 (14–16km)", warmup: null,
-          note: "Highest LSD volume of the plan. Deload Week 24: drop Tuesday and Thursday PM runs.",
-          exercises: []
-        }
       },
       milestones: [
-        { id: 'm6_mu',      text: '3–5 consecutive Bar Muscle-Ups — full lockout, no kipping' },
-        { id: 'm6_pullup',  text: '8–10 strict Pull-Ups, or 4–5 reps with +10kg weighted' },
-        { id: 'm6_hspu',    text: 'Handstand Push-Up (wall) — 4–6 reps, head to floor, full lockout' },
-        { id: 'm6_pistol',  text: 'Freestanding Pistol Squat — 5 reps/leg, no support' },
-        { id: 'm6_parkrun', text: 'Parkrun sub-25 min' },
+        { id: 'p6_mu',      text: 'Muscle-Up — 5 consecutive reps with full lockout' },
+        { id: 'p6_hspu',    text: 'HSPU — 6 reps head-to-floor at wall' },
+        { id: 'p6_pistol',  text: 'Pistol Squat — 8 freestanding reps/leg' },
+        { id: 'p6_parkrun', text: 'Parkrun — sub-25 min achieved at least once' },
+        { id: 'p6_lsd',     text: 'Sunday LSD — 22km completed in Zone 2' },
       ],
       runningPlan: {
-        note: "Tempo climbs to 10–12km. Sunday LSD hits 16km. *Thursday PM conditional — check table below. Deload Week 24: drop Tuesday and Thursday PM runs.",
-        weeklyVolume: "~45–53km/week",
+        note: "Sub-25 parkrun requires ~5:00/km. Deload Week 26: drop Tue and Thu PM runs. Sun LSD peaks 22km.",
+        weeklyVolume: "~45–52km/week",
         weeks: [
-          { label: "Week 21",          satParkrun: "5km race", sunLSD: "14km", tuePM: "6km easy Z2", wed: "10km + 2km tempo", thuPM: "5km easy*" },
-          { label: "Week 22",          satParkrun: "5km race", sunLSD: "15km", tuePM: "6km easy Z2", wed: "10km easy",        thuPM: "4km easy*" },
-          { label: "Week 23",          satParkrun: "5km race", sunLSD: "16km", tuePM: "6km easy Z2", wed: "11km + 2km tempo", thuPM: "5km easy*" },
-          { label: "Week 24 (Deload)", satParkrun: "5km easy", sunLSD: "12km", tuePM: "—",           wed: "7km easy",         thuPM: "—", deload: true },
+          { label: "Week 23 (08 Nov)",           satParkrun: "5km race", sunLSD: "18km", tuePM: "6km Z2", wed: "10km + 3km tempo",  thuPM: "5km Z1*" },
+          { label: "Week 24 (15 Nov)",           satParkrun: "5km race", sunLSD: "20km", tuePM: "6km Z2", wed: "11km easy",          thuPM: "4km Z1*" },
+          { label: "Week 25 (22 Nov)",           satParkrun: "5km race", sunLSD: "22km", tuePM: "6km Z2", wed: "12km + 2km tempo",   thuPM: "5km Z1*" },
+          { label: "Week 26 (29 Nov) — Deload",  satParkrun: "5km easy", sunLSD: "14km", tuePM: "REST",   wed: "7km easy",           thuPM: "REST", deload: true },
+        ]
+      }
+    },
+
+    /* ── PHASE 7: PERFORMANCE — Weeks 27–30 ─────────── */
+    {
+      id: 7, name: "Phase 7: Performance", startWeek: 27, endWeek: 30, weekCount: 4,
+      theme: "Wednesday becomes interval sessions. LSD hits 30km. All skills locked in. Week 30 is full benchmark week. Marathon base complete.",
+      weeklySchedule: {
+        monday:    { am: "Full REST + Sauna/Cold Protocol", pm: null, duration: "—" },
+        tuesday:   { am: "Gym: Max Effort Calisthenics Skills", pm: "Easy run 5–6km (Zone 2)", duration: "AM 65 / PM 35 min" },
+        wednesday: { am: "Interval Run — 5×1km Zone 4–5", pm: null, duration: "65 min" },
+        thursday:  { am: "Gym: Active Recovery — KB Flow + Mobility", pm: "Easy jog or walk 4km (Zone 1)", duration: "AM 45 / PM 30 min" },
+        friday:    { am: "Gym: Full-Body Calisthenics", pm: null, duration: "65 min" },
+        saturday:  { am: "Parkrun 5km — target PB / sub-23 min", pm: null, duration: "30–35 min" },
+        sunday:    { am: "LSD — Zone 2 (25–30km)", pm: null, duration: "150–200 min" },
+      },
+      workouts: {
+        tuesday: {
+          title: "Max Effort Calisthenics Skills", warmup: "Universal protocol (8 min) + band pull-aparts",
+          note: "These are the Week 30 targets you've been building toward for 30 weeks.",
+          blocks: [
+            { block: "30-Week Skill Targets", exercises: [
+              { name: "Pull-Ups",                setsReps: "15 strict OR 8 with +15kg", detail: "Max reps dead hang, no kipping" },
+              { name: "Bar Muscle-Up",            setsReps: "5 consecutive reps",        detail: "Unbroken set from dead hang" },
+              { name: "Ring Dip",                 setsReps: "12 reps full depth",        detail: "Bodyweight, full range" },
+              { name: "Pistol Squat",             setsReps: "8 reps/leg freestanding",   detail: "No support, 3s eccentric" },
+              { name: "Handstand Push-Up (wall)", setsReps: "8 reps head to floor",      detail: "Full lockout each rep" },
+              { name: "L-Sit",                    setsReps: "30 second hold",            detail: "Legs straight, no bending" },
+              { name: "Planche Lean",             setsReps: "30 second hold",            detail: "Against wall, forward lean" },
+            ]},
+          ]
+        },
+        thursday: {
+          title: "Active Recovery: KB Flow + Mobility", warmup: null,
+          note: "Light session only — keeps movement quality without adding fatigue. The intervals on Wed and big weekend sessions are the priority.",
+          exercises: [
+            { name: "KB Swing (light — 12kg)",       sets: 3, reps: "10",       rest: "—", notes: "Hip pattern maintenance — not power" },
+            { name: "KB Turkish Get-Up",              sets: 3, reps: "3/side",   rest: "—", notes: "Light weight, perfect form" },
+            { name: "Joint mobility flow",            sets: 1, reps: "10 min",   rest: "—", notes: "Ankles, hips, thoracic, shoulders" },
+            { name: "Hamstring + hip flexor stretch", sets: 1, reps: "2 min/side",rest: "—",notes: "" },
+            { name: "Box breathing",                  sets: 1, reps: "5 min",    rest: "—", notes: "4s in · 4s hold · 4s out · 4s hold" },
+          ]
+        },
+        friday: {
+          title: "Full-Body Calisthenics", warmup: "Universal protocol (8 min)",
+          exercises: [
+            { name: "Pull-Up (max reps)",    sets: 4, reps: "max",    rest: "120s", notes: "Dead hang. Count every clean rep." },
+            { name: "Bar or Ring Dip",       sets: 4, reps: "max",    rest: "90s",  notes: "Full depth — shoulder below elbow" },
+            { name: "Archer Push-Up",        sets: 3, reps: "6/side", rest: "90s",  notes: "Strict form throughout" },
+            { name: "Pistol Squat",          sets: 3, reps: "6/leg",  rest: "90s",  notes: "Freestanding — consolidate" },
+            { name: "Toes-to-Bar",           sets: 3, reps: "10",     rest: "60s",  notes: "No swinging" },
+            { name: "Single-Leg Calf Raise", sets: 3, reps: "15/leg", rest: "45s",  notes: "Off a step — never skip" },
+          ]
+        },
+      },
+      milestones: [
+        { id: 'p7_mu',      text: 'Bar Muscle-Up — 5 consecutive from dead hang' },
+        { id: 'p7_hspu',    text: 'HSPU — 8 reps head-to-floor at wall' },
+        { id: 'p7_pistol',  text: 'Pistol Squat — 8 freestanding reps/leg' },
+        { id: 'p7_parkrun', text: 'Parkrun — sub-23 min PB' },
+        { id: 'p7_lsd',     text: 'Sunday LSD — 30km completed in Zone 2' },
+      ],
+      runningPlan: {
+        note: "Intervals: 5:10–5:20/km for 1km reps, 400m jog recovery. Week 30 is full benchmark. 30km LSD is marathon confidence run.",
+        weeklyVolume: "~48–56km/week",
+        weeks: [
+          { label: "Week 27 (06 Dec)",             satParkrun: "5km race effort",  sunLSD: "25km Z2",  tuePM: "5km Z2", wed: "5×1km @5:10–5:20",  thuPM: "4km jog" },
+          { label: "Week 28 (13 Dec)",             satParkrun: "5km race effort",  sunLSD: "28km Z2",  tuePM: "6km Z2", wed: "4×1.5km race pace",   thuPM: "4km jog" },
+          { label: "Week 29 (20 Dec)",             satParkrun: "5km easy",         sunLSD: "30km Z2",  tuePM: "5km Z2", wed: "6×800m Zone 5",       thuPM: "4km jog" },
+          { label: "Week 30 (27 Dec) — Benchmark", satParkrun: "ALL-OUT 5km",      sunLSD: "10km easy",tuePM: "20 min", wed: "3×1km easy — flush",  thuPM: "Walk 20 min" },
         ]
       }
     },
@@ -1883,18 +2002,17 @@ const PLAN_DATA = {
   ],
 
   weeklyTemplate: [
-    { day: "Monday",    m1: "Full REST",             m2: "Full REST",             m3: "REST + stretch",        m4: "Full REST",           m5: "REST + Full Mobility", m6: "REST + Deep Recovery" },
-    { day: "Tuesday",   m1: "Calisthenics A",        m2: "Push Focus",            m3: "Push + Dip Focus",      m4: "Upper Push (heavy)",  m5: "Heavy Upper + HS",    m6: "Skills: MU/Pistol/HSPU" },
-    { day: "Wednesday", m1: "Zone 2 easy 20–25 min", m2: "Zone 2 25–30 min",      m3: "Zone 2 + strides",      m4: "Strides + Zone 3",    m5: "Tempo 8–9km",         m6: "Tempo 10–12km" },
-    { day: "Thursday",  m1: "Calisthenics B",        m2: "Pull + Hinge + PM jog", m3: "Pull Strength + PM jog",m4: "KB + Plyometrics",    m5: "HIIT Skipping + Plyo",m6: "Barbell + KB Complex" },
-    { day: "Friday",    m1: "KB Fundamentals",       m2: "KB Strength",           m3: "KB Power",              m4: "Skills + Core",       m5: "Gym Complement",      m6: "Upper/Lower" },
-    { day: "Saturday",  m1: "Parkrun easy",          m2: "Parkrun race effort",   m3: "Parkrun race",          m4: "Parkrun race",        m5: "Parkrun sub-25",      m6: "Parkrun sub-25 min" },
-    { day: "Sunday",    m1: "Skill + Mobility",      m2: "Skill + Mobility",      m3: "LSD + Mobility",        m4: "LSD 9–11km",          m5: "LSD 12–14km",         m6: "LSD 14–16km" },
+    { day: "Monday",    c: "REST",               p1: "REST",               p2: "REST",                p3: "REST + stretch",       p4: "REST",               p5: "REST + Full Mobility", p6: "Deep Recovery",         p7: "Sauna/Cold" },
+    { day: "Tuesday",   c: "Full-Body A",         p1: "Calisthenics A",     p2: "Push Focus",          p3: "Push + Dip",           p4: "Upper Push (heavy)", p5: "Heavy Upper + HS",    p6: "Skills: MU/HSPU/Pistol",p7: "Max Skills" },
+    { day: "Wednesday", c: "Easy run 20 min",     p1: "Zone 2 25–30 min",   p2: "Zone 2 + strides",    p3: "Zone 2 + Z3 intro",    p4: "Tempo run",          p5: "Tempo 8–9km",         p6: "Tempo 10–13km",         p7: "Intervals 5×1km" },
+    { day: "Thursday",  c: "Full-Body B",         p1: "Calisthenics B",     p2: "Pull + PM jog",       p3: "Pull + PM jog",        p4: "KB + Plyometrics",   p5: "HIIT Skip + Plyo",    p6: "Barbell + KB",          p7: "KB Flow + Mobility" },
+    { day: "Friday",    c: "REST",               p1: "KB Fundamentals",    p2: "KB Power",            p3: "KB Press + Lower",     p4: "Skills + Core",      p5: "Barbell Complement",  p6: "Upper/Lower Calist.",   p7: "Full-Body Calist." },
+    { day: "Saturday",  c: "Parkrun easy",        p1: "Parkrun (race Wk4)", p2: "Parkrun race",        p3: "Parkrun race",         p4: "Parkrun race",       p5: "Parkrun sub-28",      p6: "Parkrun sub-25",        p7: "Parkrun PB/sub-23" },
+    { day: "Sunday",    c: "Easy jog 20 min",     p1: "Easy jog + stretch", p2: "LSD + Mobility",      p3: "LSD + Skills",         p4: "LSD 10–12km",        p5: "LSD 14–16km",         p6: "LSD 18–22km",           p7: "LSD 25–30km" },
   ],
 
 }; /* end PLAN_DATA */
 
-/* Previous 12-month plan removed. Replaced with 6-month plan above. */
 
 
 /* =====================================================
@@ -2232,21 +2350,20 @@ function updateLastExport() {
 ===================================================== */
 
 /** Returns the phase object for a given month number (1–12) */
-function getPhaseForMonth(month) {
-  return PLAN_DATA.phases.find(p => p.months.includes(month)) || PLAN_DATA.phases[0];
+function getPhaseForWeek(weekNo) {
+  return PLAN_DATA.phases.find(p => weekNo >= p.startWeek && weekNo <= p.endWeek) || PLAN_DATA.phases[0];
 }
 
-/** Given a plan start date and today's date, return { month, weekInMonth, phase } */
+/** Given a plan start date and today's date, return { weekNo, weekInPhase, phase, daysIn } */
 function getCurrentPlanPosition(startDateStr) {
-  if (!startDateStr) return { month: 1, weekInMonth: 1, phase: PLAN_DATA.phases[0] };
+  if (!startDateStr) return { weekNo: 1, weekInPhase: 1, phase: PLAN_DATA.phases[0], daysIn: 0 };
   const start  = new Date(startDateStr);
   const today  = new Date();
   const diff   = Math.floor((today - start) / (1000 * 60 * 60 * 24));
-  const weekNo = Math.floor(diff / 7) + 1;  // 1-indexed
-  const month  = Math.min(Math.floor(diff / 28) + 1, 12);
-  const weekInMonth = ((weekNo - 1) % 4) + 1;
-  const phase  = getPhaseForMonth(month);
-  return { month, weekNo, weekInMonth, phase, daysIn: diff };
+  const weekNo = Math.min(Math.floor(diff / 7) + 1, 30);
+  const phase  = getPhaseForWeek(weekNo);
+  const weekInPhase = weekNo - phase.startWeek + 1;
+  return { weekNo, weekInPhase, phase, daysIn: diff };
 }
 
 /** Returns the day key (e.g. 'tuesday') for today's date */
@@ -2263,9 +2380,9 @@ function formatTime(totalSeconds) {
 }
 
 /** Returns phase name badge text */
-function getPhaseBadge(month) {
-  const phase = getPhaseForMonth(month);
-  return `Month ${month} — ${phase.name}`;
+function getPhaseBadge(weekNo) {
+  const phase = getPhaseForWeek(weekNo);
+  return `Wk ${weekNo} — ${phase.name}`;
 }
 
 
@@ -2380,8 +2497,7 @@ function renderDashboard() {
 
   // ---- Derive current phase ----
   const pos   = getCurrentPlanPosition(p.startDate);
-  const month = pos.month;
-  const badge = getPhaseBadge(month);
+  const badge = getPhaseBadge(pos.weekNo);
 
   // ---- Latest stat values (most recent weekly or monthly entry) ----
   const latestWeekly  = weekly.length  ? weekly[weekly.length - 1]   : null;
@@ -2440,13 +2556,13 @@ function renderDashboard() {
 
   // Today preview
   const dayKey       = getTodayDayKey();
-  const phase        = getPhaseForMonth(month);
+  const phase        = pos.phase;
   const todaySched   = phase.weeklySchedule[dayKey] || {};
   const dayNames     = { monday:'Monday', tuesday:'Tuesday', wednesday:'Wednesday', thursday:'Thursday', friday:'Friday', saturday:'Saturday', sunday:'Sunday' };
 
   // Year goal
   const yearGoal     = goals.yearGoal || '';
-  const activeGoal   = (goals.monthlyGoals || []).find(g => g.month == month && g.status !== 'achieved');
+  const activeGoal   = (goals.monthlyGoals || []).find(g => g.status !== 'achieved');
 
   // Progress bar for monthly goal
   let progressHtml = '';
@@ -2461,7 +2577,7 @@ function renderDashboard() {
     }
     progressHtml = `
       <div class="card mb-16">
-        <div class="card-title">Month ${activeGoal.month} Goal</div>
+        <div class="card-title">Week ${activeGoal.month} Goal</div>
         <div style="font-size:14px;color:var(--text);margin-bottom:8px">${activeGoal.description}</div>
         <div class="flex justify-between text-xs text-muted mb-8">
           <span>Progress</span><span>${pct}%</span>
@@ -2481,7 +2597,7 @@ function renderDashboard() {
       </div>
       <div style="text-align:right">
         <div class="text-xs text-muted">${new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div>
-        <div class="text-xs text-muted mt-8">Week ${pos.weekInMonth} of phase · Day ${pos.daysIn + 1} of plan</div>
+        <div class="text-xs text-muted mt-8">Week ${pos.weekInPhase} of phase · Day ${pos.daysIn + 1} of plan</div>
       </div>
     </div>
 
@@ -2739,16 +2855,17 @@ function renderMilestoneChecklist(phase) {
     </div>`;
 }
 
-/* ── Fix 4: Phase + week progress bar ─────────────────── */
+/* ── Phase + week progress bar ─────────────────────────── */
 function renderPlanProgress(pos, hasStartDate) {
-  const totalWeeks = 24; // 6 months × 4 weeks
-  const weeksDone  = ((pos.month - 1) * 4) + (pos.weekInMonth - 1);
-  const pct        = Math.round((weeksDone / totalWeeks) * 100);
+  const totalWeeks  = 30;
+  const weeksDone   = pos.weekNo - 1;
+  const pct         = Math.round((weeksDone / totalWeeks) * 100);
+  const phaseWeeks  = pos.phase.weekCount;
 
-  // 4 pips for the current month's weeks
-  const pips = [1,2,3,4].map(w => {
-    if (w < pos.weekInMonth)  return `<div class="week-pip done"></div>`;
-    if (w === pos.weekInMonth) return `<div class="week-pip current"></div>`;
+  const pips = Array.from({length: phaseWeeks}, (_, i) => {
+    const w = i + 1;
+    if (w < pos.weekInPhase)  return `<div class="week-pip done"></div>`;
+    if (w === pos.weekInPhase) return `<div class="week-pip current"></div>`;
     return `<div class="week-pip"></div>`;
   }).join('');
 
@@ -2756,11 +2873,11 @@ function renderPlanProgress(pos, hasStartDate) {
     <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
         <div>
-          <div style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);margin-bottom:4px">Month ${pos.month} of 6</div>
+          <div style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);margin-bottom:4px">Week ${pos.weekNo} of 30</div>
           <div style="font-size:0.95rem;font-weight:700;color:var(--text);letter-spacing:-0.01em">${pos.phase.name}</div>
         </div>
         <div style="text-align:right">
-          <div style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px">Week ${pos.weekInMonth} of 4</div>
+          <div style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px">Week ${pos.weekInPhase} of ${phaseWeeks}</div>
           <div style="display:flex;gap:5px;justify-content:flex-end">${pips}</div>
         </div>
       </div>
@@ -2893,7 +3010,7 @@ function renderTodayPlan() {
   const dayKey = getTodayDayKey();
   const sched  = phase.weeklySchedule[dayKey] || {};
   const dayNames = { monday:'Monday', tuesday:'Tuesday', wednesday:'Wednesday', thursday:'Thursday', friday:'Friday', saturday:'Saturday', sunday:'Sunday' };
-  const todayWorkouts = getTodayWorkouts(phase, dayKey, pos.weekInMonth);
+  const todayWorkouts = getTodayWorkouts(phase, dayKey, pos.weekInPhase);
 
   // Fix 6: first-visit prompt when no start date is set
   const noStartDate = !p.startDate;
@@ -2985,7 +3102,7 @@ function renderTodaySessions(sched, workouts, dayKey, phase, pos) {
   if (isRunDay) {
     // Pull this week's specific run target from the running plan
     const weeks = phase.runningPlan?.weeks || [];
-    const weekIdx = Math.min((pos?.weekInMonth || 1) - 1, weeks.length - 1);
+    const weekIdx = Math.min((pos?.weekInPhase || 1) - 1, weeks.length - 1);
     const weekData = weeks[weekIdx] || {};
     const target = dayKey === 'wednesday' ? weekData.wed
                  : dayKey === 'saturday'  ? weekData.satParkrun
@@ -3000,7 +3117,7 @@ function renderTodaySessions(sched, workouts, dayKey, phase, pos) {
         <div style="display:flex;align-items:center;gap:12px;background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:10px 14px;margin-top:4px">
           <div style="width:3px;height:36px;background:var(--accent);border-radius:2px;flex-shrink:0"></div>
           <div>
-            <div style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint)">Week ${pos?.weekInMonth || 1} target</div>
+            <div style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint)">Week ${pos?.weekInPhase || 1} target</div>
             <div style="font-size:1rem;font-weight:700;color:var(--accent);letter-spacing:-0.02em;margin-top:2px">${target}</div>
           </div>
         </div>` : ''}
@@ -3039,7 +3156,7 @@ function renderTodaySessions(sched, workouts, dayKey, phase, pos) {
   return html;
 }
 
-function getTodayWorkouts(phase, dayKey, weekInMonth) {
+function getTodayWorkouts(phase, dayKey, weekInPhase) {
   const w = phase.workouts || {};
   // New plan uses day keys directly (tuesday, thursday, friday, sunday)
   return { am: w[dayKey] || null };
@@ -3224,27 +3341,27 @@ function renderInjuryTable() {
 }
 
 function renderWeeklyTemplate() {
-  const cols = ['Day','Month 1','Month 2','Month 3','Month 4','Month 5','Month 6'];
+  const cols = ['Day','Cond.','Phase 1','Phase 2','Phase 3','Phase 4','Phase 5','Phase 6','Phase 7'];
   return `<div class="table-wrap"><table>
     <thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead>
     <tbody>${PLAN_DATA.weeklyTemplate.map(r=>`
       <tr>
         <td style="font-weight:600;color:var(--accent)">${r.day}</td>
-        <td>${r.m1}</td><td>${r.m2}</td><td>${r.m3}</td>
-        <td>${r.m4}</td><td>${r.m5}</td><td>${r.m6}</td>
+        <td>${r.c}</td><td>${r.p1}</td><td>${r.p2}</td><td>${r.p3}</td>
+        <td>${r.p4}</td><td>${r.p5}</td><td>${r.p6}</td><td>${r.p7}</td>
       </tr>`).join('')}
     </tbody></table></div>`;
 }
 
 // ---- Phase accordion in plan browser ----
 function renderPhaseAccordion(phase) {
-  const monthRange = phase.months.length > 1
-    ? `Months ${phase.months[0]}–${phase.months[phase.months.length-1]}`
-    : `Month ${phase.months[0]}`;
+  const weekRange = phase.startWeek === phase.endWeek
+    ? `Week ${phase.startWeek}`
+    : `Weeks ${phase.startWeek}–${phase.endWeek}`;
   return `
     <div class="accordion-item">
       <button class="accordion-header">
-        <span>Phase ${phase.id} — ${monthRange}: ${phase.name}</span>
+        <span>${phase.id === 0 ? 'Conditioning' : `Phase ${phase.id}`} — ${weekRange}: ${phase.name}</span>
         <span class="chevron">▾</span>
       </button>
       <div class="accordion-body">
@@ -3872,9 +3989,9 @@ function renderMonthlyAssessment() {
         <div class="form-section-title">Month &amp; Date</div>
         <div class="form-grid cols-2">
           <div class="form-group">
-            <label>Plan Month</label>
+            <label>Plan Week</label>
             <select id="ma-month">
-              ${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${i+1===pos.month?'selected':''}>Month ${i+1}</option>`).join('')}
+              ${Array.from({length:30},(_,i)=>`<option value="${i+1}" ${i+1===pos.weekNo?'selected':''}>Week ${i+1}</option>`).join('')}
             </select>
           </div>
           <div class="form-group">
@@ -4131,9 +4248,9 @@ function renderGoals() {
       <div class="form-section-title">📅 New Monthly Goal</div>
       <div class="form-grid cols-2">
         <div class="form-group">
-          <label>Month</label>
+          <label>Plan Week</label>
           <select id="g-month">
-            ${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${i+1===pos.month?'selected':''}>Month ${i+1}</option>`).join('')}
+            ${Array.from({length:30},(_,i)=>`<option value="${i+1}" ${i+1===pos.weekNo?'selected':''}>Week ${i+1}</option>`).join('')}
           </select>
         </div>
         <div class="form-group">
