@@ -2492,6 +2492,7 @@ function renderDashboard() {
   const goals   = getGoals();
 
   const hasProfile = p && p.name;
+  const b          = p.baseline || {};
 
   const el = document.getElementById('dashboard-content');
 
@@ -3647,9 +3648,24 @@ function saveDailyLog(e) {
   };
 
   const logs = getDailyLogs();
-  logs.push(entry);
+  const existingIdx = logs.findIndex(l => l.date === entry.date);
+  if (existingIdx >= 0) {
+    // Merge sessions, keep new values for numeric fields if provided
+    const existing = logs[existingIdx];
+    entry.sessions = [...new Set([...(existing.sessions || []), ...(entry.sessions || [])])];
+    if (!entry.restingHR && existing.restingHR) entry.restingHR = existing.restingHR;
+    if (!entry.pushups   && existing.pushups)   entry.pushups   = existing.pushups;
+    if (!entry.pullups   && existing.pullups)   entry.pullups   = existing.pullups;
+    if (!entry.plank     && existing.plank)     entry.plank     = existing.plank;
+    if (!entry.notes     && existing.notes)     entry.notes     = existing.notes;
+    entry.id = existing.id;
+    logs[existingIdx] = entry;
+    showToast('Daily log updated!', 'success');
+  } else {
+    logs.push(entry);
+    showToast('Daily log saved!', 'success');
+  }
   storageSet(KEYS.daily, logs);
-  showToast('Daily log saved!', 'success');
 
   // Reset form but keep date
   document.getElementById('dl-date').value = new Date().toISOString().slice(0,10);
@@ -4522,10 +4538,23 @@ function buildHistoryCard(e, i) {
         </div>
         <span style="color:var(--muted);font-size:14px;flex-shrink:0">▾</span>
       </div>
-      <div style="display:none;padding:12px 16px;border-top:1px solid var(--border)">${detail}</div>
+      <div style="display:none;padding:12px 16px;border-top:1px solid var(--border)">
+        ${detail}
+        ${e._type === 'daily' ? `
+        <div style="margin-top:12px;padding-top:8px;border-top:1px solid var(--border)">
+          <button onclick="deleteDailyLog('${e.id}');event.stopPropagation()" style="background:transparent;border:1px solid #ff4d4d;color:#ff4d4d;border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer">Delete entry</button>
+        </div>` : ''}
+      </div>
     </div>`;
 }
 
+function deleteDailyLog(id) {
+  if (!confirm('Delete this daily log entry?')) return;
+  const logs = getDailyLogs().filter(l => String(l.id) !== String(id));
+  storageSet(KEYS.daily, logs);
+  renderHistory();
+  showToast('Entry deleted', 'success');
+}
 
 
 /* =====================================================
