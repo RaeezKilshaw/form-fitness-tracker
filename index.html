@@ -640,10 +640,9 @@
       flex-shrink: 0;
     }
     .activity-cell.level-0 { background: var(--surface2); }
-    .activity-cell.level-1 { background: rgba(200,245,66,0.25); }
-    .activity-cell.level-2 { background: rgba(200,245,66,0.55); }
-    .activity-cell.level-3 { background: var(--accent); }
+    .activity-cell.level-1 { background: var(--accent); }
     .activity-cell.level-x { background: transparent; }
+    .activity-cell.today-cell { box-shadow: 0 0 0 1.5px var(--accent); }
     .activity-legend {
       display: flex;
       align-items: center;
@@ -1058,13 +1057,13 @@
     <span class="tab-icon">📋</span>
     <span class="tab-label">Today</span>
   </button>
+  <button class="tab-btn" data-tab="stats" onclick="switchTab('stats')">
+    <span class="tab-icon">📊</span>
+    <span class="tab-label">Dashboard</span>
+  </button>
   <button class="tab-btn" data-tab="log" onclick="switchTab('log')">
     <span class="tab-icon">✏️</span>
     <span class="tab-label">Log</span>
-  </button>
-  <button class="tab-btn" data-tab="stats" onclick="switchTab('stats')">
-    <span class="tab-icon">📊</span>
-    <span class="tab-label">Stats</span>
   </button>
   <button class="tab-btn" data-tab="more" onclick="openMoreSheet()">
     <span class="tab-icon">···</span>
@@ -1094,13 +1093,13 @@
     <div class="page-content">
       <div class="sub-tabs">
         <button class="sub-tab-btn active" data-subtab="log-daily" onclick="switchSubTab('log','daily')">Daily</button>
-        <button class="sub-tab-btn" data-subtab="log-weekly" onclick="switchSubTab('log','weekly')">Weekly</button>
+        <button class="sub-tab-btn" data-subtab="log-catchup" onclick="switchSubTab('log','catchup')">Catch-Up</button>
       </div>
       <div id="subtab-log-daily" class="sub-tab-page active">
         <div id="daily-content"></div>
       </div>
-      <div id="subtab-log-weekly" class="sub-tab-page">
-        <div id="weekly-content"></div>
+      <div id="subtab-log-catchup" class="sub-tab-page">
+        <div id="catchup-content"></div>
       </div>
     </div>
   </div>
@@ -1140,6 +1139,11 @@
     <div class="sheet-handle"></div>
     <div class="sheet-section-title">More</div>
     <div class="more-grid">
+      <div class="more-card" onclick="openMorePage('weekly')">
+        <span class="more-card-icon">🏃</span>
+        <span class="more-card-label">Sunday log</span>
+        <span class="more-card-title">Weekly Check-in</span>
+      </div>
       <div class="more-card" onclick="openMorePage('monthly')">
         <span class="more-card-icon">📅</span>
         <span class="more-card-label">Assessment</span>
@@ -1150,10 +1154,15 @@
         <span class="more-card-label">Targets</span>
         <span class="more-card-title">Goals</span>
       </div>
-<div class="more-card" onclick="openMorePage('profile')">
+      <div class="more-card" onclick="openMorePage('profile')">
         <span class="more-card-icon">👤</span>
         <span class="more-card-label">Setup</span>
         <span class="more-card-title">Profile</span>
+      </div>
+      <div class="more-card" onclick="openMorePage('plan')">
+        <span class="more-card-icon">🗓️</span>
+        <span class="more-card-label">Full schedule</span>
+        <span class="more-card-title">Plan Browser</span>
       </div>
     </div>
   </div>
@@ -1367,6 +1376,30 @@
       </div>
     </div>
   </div>
+
+<!-- Weekly Check-in -->
+<div id="page-weekly" class="secondary-page">
+  <div class="secondary-page-topbar">
+    <button class="btn-back" onclick="closeSecondaryPage()">← Back</button>
+    <span class="secondary-page-title">Weekly Check-in</span>
+    <div style="width:60px"></div>
+  </div>
+  <div class="page-content" style="padding-bottom: 40px;">
+    <div id="weekly-content"></div>
+  </div>
+</div>
+
+<!-- Plan Browser -->
+<div id="page-plan" class="secondary-page">
+  <div class="secondary-page-topbar">
+    <button class="btn-back" onclick="closeSecondaryPage()">← Back</button>
+    <span class="secondary-page-title">Plan Browser</span>
+    <div style="width:60px"></div>
+  </div>
+  <div class="page-content" style="padding-bottom: 40px;">
+    <div id="plan-browser-content"></div>
+  </div>
+</div>
 
 <!-- Toast container -->
 <div id="toast-container"></div>
@@ -2081,9 +2114,9 @@ const TAB_MAP = {
   dashboard: { parent: 'stats', sub: 'dashboard' },
   history:   { parent: 'stats', sub: 'history' },
   daily:     { parent: 'log',   sub: 'daily' },
-  weekly:    { parent: 'log',   sub: 'weekly' },
+  catchup:   { parent: 'log',   sub: 'catchup' },
 };
-const SECONDARY_PAGES = ['monthly', 'goals', 'profile'];
+const SECONDARY_PAGES = ['monthly', 'goals', 'profile', 'weekly', 'plan'];
 
 function switchTab(tabId) {
   // Route secondary pages to slide-over panels
@@ -2115,7 +2148,7 @@ function switchTab(tabId) {
     today:     () => renderTodayPlan(),
     dashboard: () => renderDashboard(),
     daily:     () => renderDailyLog(),
-    weekly:    () => renderWeeklyCheckin(),
+    catchup:   () => renderCatchUpLog(),
     history:   () => renderHistory(),
   };
   if (render[tabId]) render[tabId]();
@@ -2134,15 +2167,24 @@ function switchSubTab(parent, subId) {
   // Trigger render for the newly visible sub-tab
   if (parent === 'stats' && subId === 'history')   renderHistory();
   if (parent === 'stats' && subId === 'dashboard') renderDashboard();
-  if (parent === 'log'   && subId === 'weekly')    renderWeeklyCheckin();
+  if (parent === 'log'   && subId === 'catchup')   renderCatchUpLog();
   if (parent === 'log'   && subId === 'daily')     renderDailyLog();
 }
 
 function openMoreSheet() {
   document.getElementById('more-overlay').classList.add('open');
-  // Deactivate More nav button (it's not a real tab)
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
 }
+
+// Swipe-down to close the More sheet
+(function() {
+  let startY = 0;
+  const sheet = document.getElementById('more-sheet');
+  sheet.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, { passive: true });
+  sheet.addEventListener('touchend', e => {
+    if (e.changedTouches[0].clientY - startY > 60) closeMoreSheet(null);
+  }, { passive: true });
+})();
 
 function closeMoreSheet(e) {
   if (!e || e.target === document.getElementById('more-overlay')) {
@@ -2166,6 +2208,8 @@ function openMorePage(pageId) {
   // Render content
   if (pageId === 'monthly') renderMonthlyAssessment();
   if (pageId === 'goals')   renderGoals();
+  if (pageId === 'weekly')  renderWeeklyCheckin();
+  if (pageId === 'plan')    renderPlanBrowserPage();
 }
 
 function closeSecondaryPage() {
@@ -2427,27 +2471,44 @@ function makeChart(key, ctx, type, labels, datasets, options = {}) {
 /* =====================================================
    ACTIVITY HEATMAP
 ===================================================== */
+function localDateISO(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
 function buildActivityGrid() {
   const logs = getDailyLogs();
+  const p    = getProfile();
   const logMap = {};
   logs.forEach(l => {
-    const count = (l.sessions || []).filter(s => s !== 'rest').length;
-    if (count > 0) logMap[l.date] = count;
+    const active = (l.sessions || []).some(s => s !== 'rest');
+    if (active) logMap[l.date] = true;
   });
 
-  const today = new Date();
-  const start = new Date(today);
-  start.setFullYear(today.getFullYear() - 1);
-  start.setDate(start.getDate() - start.getDay()); // align to Sunday
+  const todayISO = localDateISO(new Date());
 
+  // Start from plan start date; fall back to 10 weeks ago
+  let start;
+  if (p.startDate) {
+    start = new Date(p.startDate + 'T00:00:00');
+  } else {
+    const fallback = new Date();
+    fallback.setDate(fallback.getDate() - 69);
+    start = fallback;
+  }
+  // Align start backward to the nearest Monday
+  const dow = start.getDay();
+  const toMon = dow === 0 ? -6 : 1 - dow;
+  start.setDate(start.getDate() + toMon);
+
+  // Show full 31 weeks — covers the entire 30-week plan plus alignment padding
+  const SHOW_WEEKS = p.startDate ? 31 : 10;
   const weeks = [];
   const d = new Date(start);
-  while (d <= today) {
+  for (let w = 0; w < SHOW_WEEKS; w++) {
     const week = [];
     for (let i = 0; i < 7; i++) {
-      const iso = d.toISOString().slice(0, 10);
-      const future = d > today;
-      week.push({ iso, count: logMap[iso] || 0, future });
+      const iso = localDateISO(d);
+      week.push({ iso, active: !!logMap[iso], isToday: iso === todayISO });
       d.setDate(d.getDate() + 1);
     }
     weeks.push(week);
@@ -2466,20 +2527,12 @@ function buildActivityGrid() {
           ${weeks.map(w => `
             <div class="activity-col">
               ${w.map(day => `
-                <div class="activity-cell level-${day.future ? 'x' : Math.min(day.count, 3)}"
-                     title="${day.iso}${day.count ? ' · ' + day.count + ' session' + (day.count !== 1 ? 's' : '') : ''}"></div>`
+                <div class="activity-cell ${day.active ? 'level-1' : 'level-0'}${day.isToday ? ' today-cell' : ''}"
+                     title="${day.iso}${day.active ? ' · trained' : ''}"></div>`
               ).join('')}
             </div>`
           ).join('')}
         </div>
-      </div>
-      <div class="activity-legend">
-        <span class="activity-legend-label">Less</span>
-        <div class="activity-cell level-0"></div>
-        <div class="activity-cell level-1"></div>
-        <div class="activity-cell level-2"></div>
-        <div class="activity-cell level-3"></div>
-        <span class="activity-legend-label">More</span>
       </div>
     </div>`;
 }
@@ -2521,7 +2574,7 @@ function renderDashboard() {
   const statPullups   = latest([...monthly, ...weekly], 'pullups');
   const statPlank     = latest([...monthly, ...weekly], 'plank');
   const statDeadHang  = latest([...monthly, ...weekly], 'deadHang');
-  const statParkrunS  = latest([...monthly, ...weekly], 'parkrunTotalSec');
+  const statParkrunS  = latest([...monthly, ...weekly, ...daily], 'parkrunTotalSec');
   const statVolume    = latestWeekly ? latestWeekly.totalVolume : null;
 
   // Delta helper
@@ -2537,7 +2590,7 @@ function renderDashboard() {
   }
 
   // Parkrun delta (lower = better)
-  const prevParkrunS = latest([...monthly.slice(0,-1), ...(weekly.slice(0,-1))], 'parkrunTotalSec');
+  const prevParkrunS = latest([...monthly.slice(0,-1), ...weekly.slice(0,-1), ...daily.slice(0,-1)], 'parkrunTotalSec');
   const parkrunDelta = delta(statParkrunS, prevParkrunS, true);
   const parkrunStr   = statParkrunS ? formatTime(statParkrunS) : '—';
 
@@ -2851,7 +2904,7 @@ function renderMilestoneChecklist(phase) {
       ${allDone ? `
         <div style="margin-top:10px;padding:8px 12px;background:var(--accent-dim);border-radius:8px;
              font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.06em;color:var(--accent);text-align:center">
-          ✓ Ready to advance to Month ${(phase.months[0] || 0) + 1}
+          ✓ All milestones complete — ready for the next phase
         </div>` : ''}
     </div>`;
 }
@@ -2958,14 +3011,16 @@ function logParkrunQuick() {
   const sec = parseInt(document.getElementById('pr-quick-sec').value) || 0;
   if (!min && !sec) { showToast('Enter your parkrun time first.', 'error'); return; }
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = localDateISO(new Date());
   const timeStr = `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
 
-  // Save to daily log (add parkrun session, note the time)
+  // Save to daily log (add parkrun session, note the time, store seconds for stats)
   const logs = getDailyLogs();
   const idx  = logs.findIndex(l => l.date === today);
+  const totalSec = min * 60 + sec;
   if (idx >= 0) {
     logs[idx].sessions = [...new Set([...logs[idx].sessions, 'parkrun'])];
+    logs[idx].parkrunTotalSec = totalSec;
     if (!logs[idx].notes) logs[idx].notes = `Parkrun: ${timeStr}`;
   } else {
     logs.push({
@@ -2973,6 +3028,7 @@ function logParkrunQuick() {
       sessions: ['parkrun'], restingHR: null,
       energyAM: 7, energyPM: null,
       pushups: null, pullups: null, plank: null,
+      parkrunTotalSec: totalSec,
       notes: `Parkrun: ${timeStr}`
     });
   }
@@ -3033,20 +3089,22 @@ function renderTodayPlan() {
       <button class="btn btn-primary btn-sm" onclick="prefillDailyLog()">✓ Log Today</button>
     </div>
 
-    <!-- Fix 6: setup prompt -->
+    <!-- Setup prompt -->
     ${setupPrompt}
-
-    <!-- Fix 4: phase + week progress -->
-    ${renderPlanProgress(pos, !noStartDate)}
-
-    <!-- Fix 7: milestone checklist -->
-    ${renderMilestoneChecklist(phase)}
-
-    <!-- Fix 5: recovery alert (Thu/Fri only) -->
-    ${renderRecoveryAlert(dayKey)}
 
     <!-- TODAY SESSIONS -->
     ${renderTodaySessions(sched, todayWorkouts, dayKey, phase, pos)}
+
+    <!-- Recovery alert (Thu/Fri only) -->
+    ${renderRecoveryAlert(dayKey)}
+
+    <div class="divider"></div>
+
+    <!-- Phase + week progress -->
+    ${renderPlanProgress(pos, !noStartDate)}
+
+    <!-- Milestone checklist -->
+    ${renderMilestoneChecklist(phase)}
 
     <div class="divider"></div>
 
@@ -3058,14 +3116,6 @@ function renderTodayPlan() {
       ${refAccordion('recovery-ref','💓 Recovery Load Table', renderRecoveryTable())}
       ${refAccordion('injury-ref',  '⚠️ Injury Prevention', renderInjuryTable())}
       ${refAccordion('template-ref','📅 Full Weekly Template', renderWeeklyTemplate())}
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- FULL PLAN BROWSER -->
-    <h3 style="margin-bottom:12px">Full Plan Browser</h3>
-    <div id="plan-browser">
-      ${PLAN_DATA.phases.map(ph => renderPhaseAccordion(ph)).join('')}
     </div>
   `;
 
@@ -3497,9 +3547,136 @@ function prefillDailyLog() {
 /* =====================================================
    DAILY LOG — RENDER & SAVE
 ===================================================== */
+function renderCatchUpLog() {
+  const el = document.getElementById('catchup-content');
+  if (!el) return;
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const defaultDate = yesterday.toISOString().slice(0, 10);
+
+  el.innerHTML = `
+    <h2 style="margin-bottom:4px">Catch-Up Log</h2>
+    <p class="text-sm text-muted mb-20">Forgot to log a day? Pick the date and fill it in.</p>
+
+    <form id="cu-form" onsubmit="saveCatchUpLog(event)">
+      <div class="form-section">
+        <div class="form-section-title">Date</div>
+        <div class="form-group">
+          <label>Date missed</label>
+          <input type="date" id="cu-date" value="${defaultDate}" max="${new Date().toISOString().slice(0,10)}" required />
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Sessions</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <label class="session-chip"><input type="checkbox" class="cu-session-cb" value="am_calisthenics"><span>Calisthenics</span></label>
+          <label class="session-chip"><input type="checkbox" class="cu-session-cb" value="kb_plyo"><span>KB · Plyo</span></label>
+          <label class="session-chip"><input type="checkbox" class="cu-session-cb" value="hard_run"><span>Run</span></label>
+          <label class="session-chip"><input type="checkbox" class="cu-session-cb" value="parkrun"><span>Parkrun</span></label>
+          <label class="session-chip"><input type="checkbox" class="cu-session-cb" value="lsd"><span>LSD</span></label>
+          <label class="session-chip"><input type="checkbox" class="cu-session-cb" value="pm_easy_run"><span>PM Run</span></label>
+          <label class="session-chip"><input type="checkbox" class="cu-session-cb" value="gym"><span>Gym</span></label>
+          <label class="session-chip"><input type="checkbox" class="cu-session-cb" value="rest"><span>Rest</span></label>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Body</div>
+        <div class="form-grid cols-2">
+          <div class="form-group">
+            <label>Resting HR (bpm)</label>
+            <input type="number" id="cu-rhr" min="30" max="120" placeholder="e.g. 52" />
+          </div>
+          <div class="form-group">
+            <label>Energy AM (1–10)</label>
+            <input type="range" id="cu-energy-am" min="1" max="10" value="7"
+              oninput="document.getElementById('cu-energy-am-val').textContent=this.value" />
+            <span class="range-val" id="cu-energy-am-val">7</span>
+          </div>
+        </div>
+        <div class="form-grid cols-3">
+          <div class="form-group">
+            <label>Push-Ups</label>
+            <input type="number" id="cu-pushups" min="0" placeholder="reps" />
+          </div>
+          <div class="form-group">
+            <label>Pull-Ups</label>
+            <input type="number" id="cu-pullups" min="0" placeholder="reps" />
+          </div>
+          <div class="form-group">
+            <label>Plank (s)</label>
+            <input type="number" id="cu-plank" min="0" placeholder="secs" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Notes</div>
+        <div class="form-group">
+          <textarea id="cu-notes" rows="2" placeholder="Anything worth noting…" style="width:100%;resize:vertical"></textarea>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%">Save Entry</button>
+    </form>`;
+}
+
+function saveCatchUpLog(e) {
+  e.preventDefault();
+  const sessions = [...document.querySelectorAll('.cu-session-cb:checked')].map(c => c.value);
+  const entry = {
+    id:        Date.now(),
+    date:      document.getElementById('cu-date').value,
+    sessions,
+    restingHR: parseInt(document.getElementById('cu-rhr').value) || null,
+    energyAM:  parseInt(document.getElementById('cu-energy-am').value),
+    energyPM:  null,
+    pushups:   parseInt(document.getElementById('cu-pushups').value) || null,
+    pullups:   parseInt(document.getElementById('cu-pullups').value) || null,
+    plank:     parseInt(document.getElementById('cu-plank').value) || null,
+    notes:     document.getElementById('cu-notes').value.trim()
+  };
+
+  const logs = getDailyLogs();
+  const existingIdx = logs.findIndex(l => l.date === entry.date);
+  if (existingIdx >= 0) {
+    const existing = logs[existingIdx];
+    entry.sessions = [...new Set([...(existing.sessions || []), ...(entry.sessions || [])])];
+    if (!entry.restingHR && existing.restingHR) entry.restingHR = existing.restingHR;
+    if (!entry.pushups   && existing.pushups)   entry.pushups   = existing.pushups;
+    if (!entry.pullups   && existing.pullups)   entry.pullups   = existing.pullups;
+    if (!entry.plank     && existing.plank)     entry.plank     = existing.plank;
+    entry.id = existing.id;
+    logs[existingIdx] = entry;
+    showToast('Catch-up entry updated!', 'success');
+  } else {
+    logs.push(entry);
+    showToast('Catch-up entry saved!', 'success');
+  }
+  storageSet(KEYS.daily, logs);
+  renderCatchUpLog();
+}
+
+function renderPlanBrowserPage() {
+  const el = document.getElementById('plan-browser-content');
+  if (!el) return;
+  el.innerHTML = `
+    <h2 style="margin-bottom:4px">Full Plan Browser</h2>
+    <p class="text-sm text-muted mb-20">30-week plan — Jun 7 2026 → Jan 3 2027. Tap a phase to expand.</p>
+    ${PLAN_DATA.phases.map(ph => renderPhaseAccordion(ph)).join('')}`;
+  el.querySelectorAll('.accordion-header').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const body = btn.nextElementSibling;
+      btn.classList.toggle('open');
+      if (body) body.classList.toggle('open');
+    });
+  });
+}
+
 function renderDailyLog() {
   const el = document.getElementById('daily-content');
-  const today = new Date().toISOString().slice(0,10);
+  const today = localDateISO(new Date());
 
   // Check for prefill from "Mark Today Complete"
   let prefill = null;
@@ -4331,6 +4508,9 @@ function saveYearGoal() {
   goals.yearGoal = document.getElementById('g-year-goal').value.trim();
   storageSet(KEYS.goals, goals);
   showToast('Year goal saved!', 'success');
+  // Refresh dashboard so banner updates immediately on next visit
+  const dashSub = document.getElementById('subtab-stats-dashboard');
+  if (dashSub && dashSub.classList.contains('active')) renderDashboard();
 }
 
 function saveMonthlyGoal() {
@@ -4590,7 +4770,7 @@ function init() {
   }
 
   // Keyboard shortcuts: Alt+1–4
-  const tabIds = ['today', 'log', 'stats'];
+  const tabIds = ['today', 'stats', 'log'];
   document.addEventListener('keydown', e => {
     if (e.altKey && e.key >= '1' && e.key <= '4') {
       const idx = parseInt(e.key) - 1;
